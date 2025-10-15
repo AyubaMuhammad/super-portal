@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll Now - SchoolSync Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5bd9;
+            --secondary: #ff9f43;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --light-gray: #e9ecef;
+            --success: #28a745;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--light-gray);
+            padding: 15px 0;
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb span {
+            margin: 0 10px;
+            color: var(--gray);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Enrollment Layout */
+        .enrollment-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 50px;
+            margin-bottom: 80px;
+        }
+
+        /* Enrollment Process */
+        .enrollment-process {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+        }
+
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--light-gray);
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-number {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: var(--gray);
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Form Styles */
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dde1e6;
+        }
+
+        .btn-disabled {
+            background-color: var(--light-gray);
+            color: var(--gray);
+            cursor: not-allowed;
+        }
+
+        /* Enrollment Summary */
+        .enrollment-summary {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--gray);
+        }
+
+        .summary-value {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid var(--light-gray);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .benefit-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 30px;
+        }
+
+        .benefit-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .benefit-card p {
+            color: var(--gray);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-bottom: 80px;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .faq-item {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+        }
+
+        .faq-item h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .faq-item h3 i {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .faq-item p {
+            color: var(--gray);
+        }
+
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--success);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+        }
+
+        .success-message h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .success-message p {
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-column p, .footer-column a {
+            color: #bbb;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .enrollment-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-grid, .faq-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .enrollment-summary {
+                position: static;
+                margin-top: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+            
+            .process-steps {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            
+            .process-steps::before {
+                display: none;
+            }
+            
+            .step {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .benefits-grid, .faq-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">School<span>Sync</span></div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="classes.html">Classes</a></li>
+                        <li><a href="leadership.html">Leadership</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </nav>
+                <a href="enroll-now.html" class="cta-button">Enroll Now</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="#">HOME</a>
+                <span>/</span>
+                <a href="#">ENROLLMENT</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Enroll Your Child Today</h1>
+            <p>Begin your child's educational journey with SchoolSync Academy. Our simple enrollment process gets you started in just a few steps.</p>
+        </div>
+    </section>
+
+    <!-- Enrollment Layout -->
+    <section class="enrollment-section">
+        <div class="container">
+            <div class="enrollment-layout">
+                <!-- Enrollment Process -->
+                <div class="enrollment-process">
+                    <!-- Process Steps -->
+                    <div class="process-steps">
+                        <div class="step active" id="step-1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Child Information</div>
+                        </div>
+                        <div class="step" id="step-2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Parent Information</div>
+                        </div>
+                        <div class="step" id="step-3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Program Selection</div>
+                        </div>
+                        <div class="step" id="step-4">
+                            <div class="step-number">4</div>
+                            <div class="step-label">Review & Submit</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Child Information -->
+                    <div class="form-step active" id="form-step-1">
+                        <h2 class="form-title">Child Information</h2>
+                        <form id="child-info-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="child-first-name">First Name</label>
+                                    <input type="text" id="child-first-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="child-last-name">Last Name</label>
+                                    <input type="text" id="child-last-name" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="child-dob">Date of Birth</label>
+                                    <input type="date" id="child-dob" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="child-gender">Gender</label>
+                                    <select id="child-gender" class="form-control" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="child-allergies">Allergies or Medical Conditions</label>
+                                <textarea id="child-allergies" class="form-control" rows="3" placeholder="Please list any allergies, medical conditions, or special needs"></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary btn-disabled" disabled>Previous</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 2: Parent Information -->
+                    <div class="form-step" id="form-step-2">
+                        <h2 class="form-title">Parent/Guardian Information</h2>
+                        <form id="parent-info-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="parent-first-name">First Name</label>
+                                    <input type="text" id="parent-first-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent-last-name">Last Name</label>
+                                    <input type="text" id="parent-last-name" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="parent-email">Email Address</label>
+                                    <input type="email" id="parent-email" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent-phone">Phone Number</label>
+                                    <input type="tel" id="parent-phone" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="parent-address">Home Address</label>
+                                <input type="text" id="parent-address" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="parent-city">City</label>
+                                    <input type="text" id="parent-city" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent-zip">ZIP Code</label>
+                                    <input type="text" id="parent-zip" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Previous</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 3: Program Selection -->
+                    <div class="form-step" id="form-step-3">
+                        <h2 class="form-title">Program Selection</h2>
+                        <form id="program-selection-form">
+                            <div class="form-group">
+                                <label for="program-type">Program Type</label>
+                                <select id="program-type" class="form-control" required onchange="updateProgramSummary()">
+                                    <option value="">Select Program</option>
+                                    <option value="full-day">Full Day Program (7:00 AM - 6:00 PM)</option>
+                                    <option value="half-day-am">Half Day Morning (7:00 AM - 12:00 PM)</option>
+                                    <option value="half-day-pm">Half Day Afternoon (1:00 PM - 6:00 PM)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="start-date">Preferred Start Date</label>
+                                <input type="date" id="start-date" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Additional Classes (Optional)</label>
+                                <div style="margin-top: 10px;">
+                                    <div style="margin-bottom: 10px;">
+                                        <input type="checkbox" id="art-class" value="art" onchange="updateProgramSummary()">
+                                        <label for="art-class">Art Class (+₦5,000/term)</label>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <input type="checkbox" id="music-class" value="music" onchange="updateProgramSummary()">
+                                        <label for="music-class">Music Class (+₦6,000/term)</label>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <input type="checkbox" id="sports-class" value="sports" onchange="updateProgramSummary()">
+                                        <label for="sports-class">Sports & Movement (+₦4,000/term)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Previous</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 4: Review & Submit -->
+                    <div class="form-step" id="form-step-4">
+                        <h2 class="form-title">Review & Submit</h2>
+                        <form id="review-form">
+                            <div class="form-group">
+                                <h3 style="margin-bottom: 15px;">Please Review Your Information</h3>
+                                <div id="review-summary" style="background-color: var(--light); padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+                                    <!-- Summary will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="comments">Additional Comments or Questions</label>
+                                <textarea id="comments" class="form-control" rows="4" placeholder="Any additional information you'd like to share with us"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div style="margin-bottom: 10px;">
+                                    <input type="checkbox" id="agree-terms" required>
+                                    <label for="agree-terms">I agree to the <a href="#" style="color: var(--primary);">Terms and Conditions</a> and <a href="#" style="color: var(--primary);">Privacy Policy</a></label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Previous</button>
+                                <button type="button" class="btn btn-primary" onclick="submitEnrollment()">Submit Enrollment</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div class="success-message" id="success-message">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2>Enrollment Submitted Successfully!</h2>
+                        <p>Thank you for choosing SchoolSync Academy. We have received your enrollment application and will contact you within 2 business days to schedule a tour and complete the registration process.</p>
+                        <a href="#" class="btn btn-primary">Return to Home</a>
+                    </div>
+                </div>
+
+                <!-- Enrollment Summary -->
+                <div class="enrollment-summary">
+                    <h3 class="summary-title">Enrollment Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Program:</span>
+                        <span class="summary-value" id="summary-program">Not selected</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Additional Classes:</span>
+                        <span class="summary-value" id="summary-classes">None</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Term Tuition:</span>
+                        <span class="summary-value" id="summary-tuition">₦0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Registration Fee:</span>
+                        <span class="summary-value">₦10,000</span>
+                    </div>
+                    <div class="summary-total">
+                        <span class="summary-label">Total First Payment:</span>
+                        <span class="summary-value" id="summary-total">₦10,000</span>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background-color: var(--light); border-radius: 5px;">
+                        <p style="font-size: 14px; color: var(--gray); margin-bottom: 10px;"><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 5px;"></i> The registration fee is due upon enrollment confirmation.</p>
+                        <p style="font-size: 14px; color: var(--gray);"><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 5px;"></i> Term tuition payments begin on the child's start date.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose SchoolSync?</h2>
+                <p>Discover the benefits of enrolling your child in our kindergarten program</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Quality Education</h3>
+                    <p>Our curriculum is designed by early childhood experts to foster cognitive, social, and emotional development.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Nurturing Environment</h3>
+                    <p>We provide a safe, caring atmosphere where children feel comfortable to explore, learn, and grow.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Experienced Teachers</h3>
+                    <p>Our dedicated staff are trained professionals with years of experience in early childhood education.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Enrollment FAQs</h2>
+                <p>Common questions about our enrollment process</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3><i class="fas fa-question-circle"></i> What is the enrollment process?</h3>
+                    <p>After submitting your enrollment form, we'll contact you to schedule a tour and meeting with our director. Once accepted, you'll complete registration paperwork and pay the registration fee.</p>
+                </div>
+                <div class="faq-item">
+                    <h3><i class="fas fa-question-circle"></i> What are the age requirements?</h3>
+                    <p>We accept children from 2 to 6 years old. Children must be 2 years old by September 1st of the enrollment year to join our program.</p>
+                </div>
+                <div class="faq-item">
+                    <h3><i class="fas fa-question-circle"></i> Is financial aid available?</h3>
+                    <p>Yes, we offer limited financial assistance based on family income and circumstances. Please contact our office for more information about financial aid options.</p>
+                </div>
+                <div class="faq-item">
+                    <h3><i class="fas fa-question-circle"></i> What are your safety protocols?</h3>
+                    <p>We maintain strict safety measures including secure facilities, staff background checks, emergency preparedness drills, and comprehensive health policies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SchoolSync</h3>
+                    <p>Welcome to SchoolSync Academy, where we nurture young minds with care, creativity, and education.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#">Home</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Classes</a>
+                    <a href="#">Leadership</a>
+                    <a href="#">Enroll</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Programs</h3>
+                    <a href="#">Full Day Program</a>
+                    <a href="#">Half Day Program</a>
+                    <a href="#">Enrichment Classes</a>
+                    <a href="#">Summer Camp</a>
+                    <a href="#">After School Care</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-envelope"></i> admissions@schoolsync.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 SchoolSync Academy. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+<script>
+    // Current step tracking
+    let currentStep = 1;
+    let db = null;
+    
+    // Program pricing (in Naira, per term)
+    const programPrices = {
+        'full-day': 80000,
+        'half-day-am': 50000,
+        'half-day-pm': 50000
+    };
+    
+    const classPrices = {
+        'art': 5000,
+        'music': 6000,
+        'sports': 4000
+    };
+    
+    // Initialize IndexedDB
+    function initDB() {
+        return new Promise((resolve, reject) => {
+            // Use version 2 to match the admission manager
+            const request = indexedDB.open('SchoolSyncDB', 2);
+            
+            request.onerror = () => {
+                console.error('IndexedDB error:', request.error);
+                reject(request.error);
+            };
+            
+            request.onsuccess = () => {
+                db = request.result;
+                console.log('IndexedDB initialized successfully');
+                resolve(db);
+            };
+            
+            request.onupgradeneeded = (event) => {
+                const database = event.target.result;
+                
+                // Create object store for enrollments if it doesn't exist
+                if (!database.objectStoreNames.contains('enrollments')) {
+                    const store = database.createObjectStore('enrollments', { 
+                        keyPath: 'id'
+                    });
+                    
+                    // Create indexes for efficient querying
+                    store.createIndex('parentEmail', 'parent.email', { unique: false });
+                    store.createIndex('submittedAt', 'submittedAt', { unique: false });
+                    store.createIndex('childName', 'child.lastName', { unique: false });
+                    store.createIndex('status', 'status', { unique: false });
+                    store.createIndex('source', 'source', { unique: false });
+                }
+            };
+        });
+    }
+    
+    // Save enrollment to IndexedDB
+    function saveEnrollment(enrollmentData) {
+        return new Promise((resolve, reject) => {
+            if (!db) {
+                reject(new Error('Database not initialized'));
+                return;
+            }
+            
+            const transaction = db.transaction(['enrollments'], 'readwrite');
+            const store = transaction.objectStore('enrollments');
+            
+            // Generate a unique ID for the enrollment
+            const enrollmentId = 'ENR-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            enrollmentData.id = enrollmentId;
+            
+            const request = store.add(enrollmentData);
+            
+            request.onsuccess = () => {
+                console.log('Enrollment saved with ID:', enrollmentId);
+                
+                // Store minimal data in localStorage for admission manager
+                const minimalData = {
+                    id: enrollmentId,
+                    child: {
+                        firstName: enrollmentData.child.firstName,
+                        lastName: enrollmentData.child.lastName,
+                        dob: enrollmentData.child.dob,
+                        gender: enrollmentData.child.gender,
+                        allergies: enrollmentData.child.allergies
+                    },
+                    parent: {
+                        firstName: enrollmentData.parent.firstName,
+                        lastName: enrollmentData.parent.lastName,
+                        email: enrollmentData.parent.email,
+                        phone: enrollmentData.parent.phone,
+                        address: enrollmentData.parent.address,
+                        city: enrollmentData.parent.city,
+                        zip: enrollmentData.parent.zip
+                    },
+                    program: {
+                        type: enrollmentData.program.type,
+                        startDate: enrollmentData.program.startDate,
+                        additionalClasses: enrollmentData.program.additionalClasses
+                    },
+                    costs: enrollmentData.costs,
+                    submittedAt: enrollmentData.submittedAt,
+                    status: enrollmentData.status
+                };
+                
+                try {
+                    localStorage.setItem('recentEnrollment', JSON.stringify(minimalData));
+                    console.log('Minimal enrollment data stored in localStorage');
+                } catch (storageError) {
+                    console.warn('Could not store in localStorage, but enrollment saved to IndexedDB:', storageError);
+                    // Continue anyway - the enrollment is saved in IndexedDB
+                }
+                
+                resolve(enrollmentId);
+            };
+            
+            request.onerror = () => {
+                console.error('Error saving enrollment:', request.error);
+                reject(request.error);
+            };
+        });
+    }
+    
+    // Navigation functions
+    function nextStep(step) {
+        // Validate current step before proceeding
+        if (validateStep(step)) {
+            document.getElementById(`form-step-${step}`).classList.remove('active');
+            document.getElementById(`step-${step}`).classList.remove('active');
+            document.getElementById(`step-${step}`).classList.add('completed');
+            
+            currentStep = step + 1;
+            
+            document.getElementById(`form-step-${currentStep}`).classList.add('active');
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            
+            // Update review summary on step 4
+            if (currentStep === 4) {
+                updateReviewSummary();
+            }
+        }
+    }
+    
+    function prevStep(step) {
+        document.getElementById(`form-step-${step}`).classList.remove('active');
+        document.getElementById(`step-${step}`).classList.remove('active');
+        
+        currentStep = step - 1;
+        
+        document.getElementById(`form-step-${currentStep}`).classList.add('active');
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+    }
+    
+    function validateStep(step) {
+        // Simple validation - in a real application, this would be more comprehensive
+        if (step === 1) {
+            const firstName = document.getElementById('child-first-name').value;
+            const lastName = document.getElementById('child-last-name').value;
+            const dob = document.getElementById('child-dob').value;
+            
+            if (!firstName || !lastName || !dob) {
+                alert('Please fill in all required child information.');
+                return false;
+            }
+        } else if (step === 2) {
+            const parentFirstName = document.getElementById('parent-first-name').value;
+            const parentLastName = document.getElementById('parent-last-name').value;
+            const email = document.getElementById('parent-email').value;
+            const phone = document.getElementById('parent-phone').value;
+            
+            if (!parentFirstName || !parentLastName || !email || !phone) {
+                alert('Please fill in all required parent information.');
+                return false;
+            }
+        } else if (step === 3) {
+            const programType = document.getElementById('program-type').value;
+            
+            if (!programType) {
+                alert('Please select a program type.');
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    function updateProgramSummary() {
+        const programType = document.getElementById('program-type').value;
+        const artClass = document.getElementById('art-class').checked;
+        const musicClass = document.getElementById('music-class').checked;
+        const sportsClass = document.getElementById('sports-class').checked;
+        
+        let programText = 'Not selected';
+        let classesText = 'None';
+        let tuition = 0;
+        
+        if (programType) {
+            programText = document.getElementById('program-type').options[document.getElementById('program-type').selectedIndex].text;
+            tuition = programPrices[programType] || 0;
+        }
+        
+        let additionalClasses = [];
+        let additionalCost = 0;
+        
+        if (artClass) {
+            additionalClasses.push('Art Class');
+            additionalCost += classPrices.art;
+        }
+        
+        if (musicClass) {
+            additionalClasses.push('Music Class');
+            additionalCost += classPrices.music;
+        }
+        
+        if (sportsClass) {
+            additionalClasses.push('Sports & Movement');
+            additionalCost += classPrices.sports;
+        }
+        
+        if (additionalClasses.length > 0) {
+            classesText = additionalClasses.join(', ');
+        }
+        
+        const total = tuition + additionalCost;
+        
+        document.getElementById('summary-program').textContent = programText;
+        document.getElementById('summary-classes').textContent = classesText;
+        document.getElementById('summary-tuition').textContent = formatCurrency(total);
+        document.getElementById('summary-total').textContent = formatCurrency(total + 10000);
+    }
+    
+    function updateReviewSummary() {
+        const childFirstName = document.getElementById('child-first-name').value;
+        const childLastName = document.getElementById('child-last-name').value;
+        const childDob = document.getElementById('child-dob').value;
+        const parentFirstName = document.getElementById('parent-first-name').value;
+        const parentLastName = document.getElementById('parent-last-name').value;
+        const parentEmail = document.getElementById('parent-email').value;
+        const programType = document.getElementById('program-type').value;
+        const startDate = document.getElementById('start-date').value;
+        
+        const programText = document.getElementById('program-type').options[document.getElementById('program-type').selectedIndex].text;
+        
+        let classesText = 'None';
+        const artClass = document.getElementById('art-class').checked;
+        const musicClass = document.getElementById('music-class').checked;
+        const sportsClass = document.getElementById('sports-class').checked;
+        
+        let additionalClasses = [];
+        if (artClass) additionalClasses.push('Art Class');
+        if (musicClass) additionalClasses.push('Music Class');
+        if (sportsClass) additionalClasses.push('Sports & Movement');
+        
+        if (additionalClasses.length > 0) {
+            classesText = additionalClasses.join(', ');
+        }
+        
+        const summaryHTML = `
+            <p><strong>Child:</strong> ${childFirstName} ${childLastName}</p>
+            <p><strong>Date of Birth:</strong> ${formatDate(childDob)}</p>
+            <p><strong>Parent/Guardian:</strong> ${parentFirstName} ${parentLastName}</p>
+            <p><strong>Email:</strong> ${parentEmail}</p>
+            <p><strong>Program:</strong> ${programText}</p>
+            <p><strong>Additional Classes:</strong> ${classesText}</p>
+            <p><strong>Start Date:</strong> ${formatDate(startDate)}</p>
+        `;
+        
+        document.getElementById('review-summary').innerHTML = summaryHTML;
+    }
+    
+    function formatDate(dateString) {
+        if (!dateString) return 'Not specified';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    
+    function formatCurrency(amount) {
+        return '₦' + amount.toLocaleString('en-NG');
+    }
+    
+    async function submitEnrollment() {
+        // Validate the final step
+        if (!document.getElementById('agree-terms').checked) {
+            alert('Please agree to the Terms and Conditions and Privacy Policy to continue.');
+            return;
+        }
+        
+        // Show loading state
+        const submitBtn = document.querySelector('#form-step-4 .btn-primary');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+        
+        try {
+            // Ensure database is initialized
+            if (!db) {
+                await initDB();
+            }
+            
+            // Collect all form data
+            const enrollmentData = {
+                child: {
+                    firstName: document.getElementById('child-first-name').value,
+                    lastName: document.getElementById('child-last-name').value,
+                    dob: document.getElementById('child-dob').value,
+                    gender: document.getElementById('child-gender').value,
+                    allergies: document.getElementById('child-allergies').value
+                },
+                parent: {
+                    firstName: document.getElementById('parent-first-name').value,
+                    lastName: document.getElementById('parent-last-name').value,
+                    email: document.getElementById('parent-email').value,
+                    phone: document.getElementById('parent-phone').value,
+                    address: document.getElementById('parent-address').value,
+                    city: document.getElementById('parent-city').value,
+                    zip: document.getElementById('parent-zip').value
+                },
+                program: {
+                    type: document.getElementById('program-type').value,
+                    startDate: document.getElementById('start-date').value,
+                    additionalClasses: {
+                        art: document.getElementById('art-class').checked,
+                        music: document.getElementById('music-class').checked,
+                        sports: document.getElementById('sports-class').checked
+                    }
+                },
+                comments: document.getElementById('comments').value,
+                submittedAt: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            // Calculate costs
+            let tuition = programPrices[enrollmentData.program.type] || 0;
+            let additionalCost = 0;
+            
+            if (enrollmentData.program.additionalClasses.art) additionalCost += classPrices.art;
+            if (enrollmentData.program.additionalClasses.music) additionalCost += classPrices.music;
+            if (enrollmentData.program.additionalClasses.sports) additionalCost += classPrices.sports;
+            
+            enrollmentData.costs = {
+                tuition: tuition,
+                additionalClasses: additionalCost,
+                registrationFee: 10000,
+                total: tuition + additionalCost + 10000
+            };
+            
+            // Save to IndexedDB
+            const enrollmentId = await saveEnrollment(enrollmentData);
+            console.log('Enrollment saved with ID:', enrollmentId);
+            
+            // Show success message
+            document.getElementById('form-step-4').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            
+            // Reset steps to completed state
+            document.getElementById('step-1').classList.add('completed');
+            document.getElementById('step-2').classList.add('completed');
+            document.getElementById('step-3').classList.add('completed');
+            document.getElementById('step-4').classList.add('completed');
+            
+        } catch (error) {
+            console.error('Error submitting enrollment:', error);
+            alert('There was an error submitting your enrollment. Please try again.');
+            
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+    
+    // Initialize the page and database
+    document.addEventListener('DOMContentLoaded', function() {
+        updateProgramSummary();
+        // Initialize database but don't wait for it (it will initialize when needed)
+        initDB().catch(error => {
+            console.error('Failed to initialize database:', error);
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - SchoolSync Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5bd9;
+            --secondary: #ff9f43;
+            --accent: #4caf50;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--light-gray);
+            padding: 15px 0;
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb span {
+            margin: 0 10px;
+            color: var(--gray);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .page-header::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Sidebar Navigation */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: color 0.3s;
+            display: block;
+            padding: 8px 0;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--primary);
+        }
+
+        .sidebar-nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Vacancies Section */
+        .vacancies {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 40px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .vacancies h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .vacancies p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .vacancies .tag {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Welcome Section */
+        .welcome {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            margin-bottom: 40px;
+            border-top: 4px solid var(--primary);
+        }
+
+        .welcome h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .welcome p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .quote {
+            background-color: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: var(--gray);
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+            border: 2px solid var(--secondary);
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            font-size: 18px;
+            color: var(--dark);
+        }
+
+        .author-info p {
+            color: var(--gray);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* Philosophy & Mission */
+        .values {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .value-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            transition: transform 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .value-card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .value-author {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .value-author .author-avatar {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .value-author h4 {
+            font-size: 16px;
+            color: var(--dark);
+        }
+
+        /* History & Testimonials */
+        .history-testimonials {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .history, .testimonials {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+
+        .history h3, .testimonials h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .history p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .testimonial-item {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .testimonial-item p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Staff Grid */
+        .staff-section {
+            margin-bottom: 40px;
+        }
+
+        .staff-section h3 {
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .staff-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .staff-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .staff-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 15px;
+            border: 3px solid var(--accent);
+        }
+
+        .staff-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .staff-card h4 {
+            font-size: 18px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .staff-card p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-column p, .footer-column a {
+            color: #bbb;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .about-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .values, .history-testimonials, .staff-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">School<span>Sync</span></div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html" class="active">About</a></li>
+                        <li><a href="classes.html">Classes</a></li>
+                        <li><a href="leadership.html">Leadership</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </nav>
+                <a href="enroll-now.html" class="cta-button">Enroll Now</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="#">HOME</a>
+                <span>/</span>
+                <a href="#">ABOUT US</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>About SchoolSync Academy</h1>
+            <p>Learn more about our mission, philosophy, history, and the dedicated team at SchoolSync Academy</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="about-layout">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <h3>About Us</h3>
+                <ul class="sidebar-nav">
+                    <li><a href="#" class="active">Overview</a></li>
+                    <li><a href="#">Mission and Philosophy</a></li>
+                    <li><a href="#">History</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="#">Our Staff</a></li>
+                    <li><a href="#">Our Environment</a></li>
+                    <li><a href="#">Our Affiliation</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Vacancies Section -->
+                <div class="vacancies">
+                    <h3>EMPLOYMENT VACANCIES</h3>
+                    <p>Join our team and shape the future, exciting opportunities await at SchoolSync Academy.</p>
+                    <span class="tag">CURRENT OPENINGS</span>
+                </div>
+
+                <!-- Welcome Section -->
+                <div class="welcome">
+                    <h2>Welcome to SchoolSync Academy</h2>
+                    <p>At SchoolSync Academy, we believe that early education is the foundation of lifelong success. Our platform is built to nurture young minds through creativity, care, and structured learning. We combine modern teaching methods with a warm, supportive environment that empowers both students and educators.</p>
+                    <p>Our mission is simple: To inspire curiosity, build confidence, and cultivate a love for learning in every child.</p>
+                    <p>We're more than just a school - we're a community of passionate educators, engaged families, and bright young learners. Whether you're a parent seeking the best start for your child or an educator looking to make a meaningful impact, SchoolSync is where growth begins.</p>
+                    
+                    <div class="quote">
+                        "We work closely with families and educators to ensure each child receives the attention and guidance they need to thrive. Our curriculum is designed to spark curiosity, encourage independence, and promote lifelong learning. SchoolSync is here to support your journey every step of the way."
+                    </div>
+                    
+                    <div class="author">
+                        <div class="author-avatar">
+                            <img src="https://i.pinimg.com/1200x/92/1f/53/921f538a4d1c1208b818eab139fc2ad2.jpg" alt="School Director">
+                        </div>
+                        <div class="author-info">
+                            <h4>Ayuba Muhammad</h4>
+                            <p>Principal and Founder</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Philosophy & Mission -->
+                <div class="values">
+                    <div class="value-card">
+                        <h3>Our Philosophy</h3>
+                        <p>We believe that every child is unique and deserves an educational environment that nurtures their individual strengths and interests. Our play-based learning approach encourages exploration, creativity, and social development while building a strong foundation for future academic success.</p>
+                        <div class="value-author">
+                            <div class="author-avatar">
+                                <img src="https://i.pinimg.com/1200x/4c/27/29/4c2729f6e1c85e9629715ab24cf2e9b5.jpg" alt="Education Director">
+                            </div>
+                            <div>
+                                <h4>Folasade Adedayo</h4>
+                                <p>Education Director</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3>Our Mission</h3>
+                        <p>To provide a safe, nurturing, and stimulating environment where children can develop socially, emotionally, cognitively, and physically. We strive to foster a lifelong love of learning while preparing children for the challenges and opportunities of elementary school and beyond.</p>
+                        <div class="value-author">
+                            <div class="author-avatar">
+                                <img src="https://i.pinimg.com/736x/e1/ce/ff/e1ceff4d446dafabf9311b55decc891e.jpg" alt="Program Coordinator">
+                            </div>
+                            <div>
+                                <h4>Ayotunde Babajide</h4>
+                                <p>Program Coordinator</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History & Testimonials -->
+                <div class="history-testimonials">
+                    <div class="history">
+                        <h3>Our History</h3>
+                        <p>Founded in 2015, SchoolSync Academy began as a small neighborhood preschool with just 12 students. Our founder, <b>Ayuba Muhammad</b>, recognized the need for a more personalized approach to early childhood education that balanced academic readiness with social-emotional development.</p>
+                        <p>Over the years, we've grown into a respected early learning center serving over 100 families in our community. Our commitment to innovative teaching methods and individualized attention has remained constant throughout our growth.</p>
+                        <p>In 2020, we expanded our facilities to include a dedicated outdoor learning environment, art studio, and technology lab, ensuring our students have access to diverse learning experiences that prepare them for the modern world.</p>
+                    </div>
+                    
+                    <div class="testimonials">
+                        <h3>Parent Testimonials</h3>
+                        <div class="testimonial-item">
+                            <p>"My daughter has flourished at SchoolSync. The teachers are attentive and creative, and she comes home excited to share what she learned each day. The balance of structured learning and free play is perfect."</p>
+                            <div class="testimonial-author">Maryam Adavi</div>
+                        </div>
+                        <div class="testimonial-item">
+                            <p>"As a working parent, I appreciate the flexible hours and the peace of mind knowing my child is in a safe, nurturing environment. The communication from teachers is excellent."</p>
+                            <div class="testimonial-author">Uchechukwu Nneka</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Section -->
+                <div class="staff-section">
+                    <h3>Our Staff</h3>
+                    <div class="staff-grid">
+                        <div class="staff-card">
+                            <div class="staff-avatar">
+                                <img src="https://i.pinimg.com/736x/a6/86/63/a68663483ad4d1597aa1d0ca683d4e66.jpg" alt="Lead Educator">
+                            </div>
+                            <h4>Chiamaka Obinna</h4>
+                            <p>Lead Educator</p>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-avatar">
+                                <img src="https://i.pinimg.com/1200x/4c/27/29/4c2729f6e1c85e9629715ab24cf2e9b5.jpg" alt="Philosophy Director">
+                            </div>
+                            <h4>Folasade Adedayo</h4>
+                            <p>Education Director</p>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-avatar">
+                                <img src="https://i.pinimg.com/736x/e1/ce/ff/e1ceff4d446dafabf9311b55decc891e.jpg" alt="Mission Coordinator">
+                            </div>
+                            <h4>Ayotunde Babajide</h4>
+                            <p>Program Coordinator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SchoolSync</h3>
+                    <p>Welcome to SchoolSync Academy, where we nurture young minds with care, creativity, and education.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#">Home</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Classes</a>
+                    <a href="#">Teachers</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Information</h3>
+                    <a href="#">Location</a>
+                    <a href="#">Opening Hours</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Stay Connected</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-envelope"></i> info@schoolsync.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 SchoolSync Academy. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

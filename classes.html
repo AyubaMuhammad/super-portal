@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Classes - SchoolSync Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5bd9;
+            --secondary: #ff9f43;
+            --science: #28a745;
+            --tech: #17a2b8;
+            --arts: #e83e8c;
+            --language: #6f42c1;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--light-gray);
+            padding: 15px 0;
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb span {
+            margin: 0 10px;
+            color: var(--gray);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .category-tab {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid var(--light-gray);
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .category-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .category-tab:hover:not(.active) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Classes Grid */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .class-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .class-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .class-image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .class-image.primary { background: linear-gradient(135deg, var(--primary) 0%, #8a63d2 100%); }
+        .class-image.science { background: linear-gradient(135deg, var(--science) 0%, #20c997 100%); }
+        .class-image.tech { background: linear-gradient(135deg, var(--tech) 0%, #6f42c1 100%); }
+        .class-image.arts { background: linear-gradient(135deg, var(--arts) 0%, #fd7e14 100%); }
+        .class-image.language { background: linear-gradient(135deg, var(--language) 0%, #e83e8c 100%); }
+
+        .class-image i {
+            font-size: 60px;
+        }
+
+        .class-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: white;
+            color: var(--dark);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .class-content {
+            padding: 25px;
+        }
+
+        .class-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .class-description {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 14px;
+            min-height: 60px;
+        }
+
+        .class-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .class-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--gray);
+        }
+
+        .class-detail i {
+            color: var(--primary);
+        }
+
+        .class-button {
+            display: block;
+            text-align: center;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .class-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Schedule Section */
+        .schedule-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .schedule-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background-color: var(--light);
+        }
+
+        .time-slot {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .class-name {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Curriculum Levels */
+        .curriculum-levels {
+            margin-bottom: 80px;
+        }
+
+        .level-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .level-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .level-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 30px;
+        }
+
+        .level-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .level-card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .level-list {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .level-list li {
+            margin-bottom: 10px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+        }
+
+        .level-list i {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #8a63d2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 80px;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #f0f0f0;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-column p, .footer-column a {
+            color: #bbb;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .classes-grid, .level-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+            
+            .category-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .schedule-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .classes-grid, .level-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">School<span>Sync</span></div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="classes.html" class="active">Classes</a></li>
+                        <li><a href="leadership.html">Leadership</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </nav>
+                <a href="enroll-now.html" class="cta-button">Enroll Now</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="index.html">HOME</a>
+                <span>/</span>
+                <a href="classes.html">CLASSES</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Comprehensive Curriculum</h1>
+            <p>From primary foundations to advanced secondary education - preparing students for academic excellence</p>
+        </div>
+    </section>
+
+    <!-- Category Tabs -->
+    <section class="category-section">
+        <div class="container">
+            <div class="category-tabs">
+                <div class="category-tab active" data-category="all">All Subjects</div>
+                <div class="category-tab" data-category="primary">Primary Level</div>
+                <div class="category-tab" data-category="science">Sciences</div>
+                <div class="category-tab" data-category="tech">Technology</div>
+                <div class="category-tab" data-category="arts">Arts & Languages</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes Grid -->
+    <section class="classes-section">
+        <div class="container">
+            <div class="classes-grid">
+                <!-- Primary Subjects -->
+                <div class="class-card" data-category="primary">
+                    <div class="class-image primary">
+                        <i class="fas fa-book-reader"></i>
+                        <div class="class-badge">Primary</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">English Language</h3>
+                        <p class="class-description">Develop strong reading, writing, and communication skills with our comprehensive English curriculum.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>6-11 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>5 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>20 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <div class="class-card" data-category="primary">
+                    <div class="class-image primary">
+                        <i class="fas fa-calculator"></i>
+                        <div class="class-badge">Primary</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">Mathematics</h3>
+                        <p class="class-description">Build strong numerical and problem-solving skills through interactive math activities and exercises.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>6-11 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>5 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>20 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <!-- Science Subjects -->
+                <div class="class-card" data-category="science">
+                    <div class="class-image science">
+                        <i class="fas fa-atom"></i>
+                        <div class="class-badge">Science</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">Physics</h3>
+                        <p class="class-description">Explore the fundamental laws of nature, motion, energy, and matter through experiments and theory.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>12-18 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>6 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>18 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <div class="class-card" data-category="science">
+                    <div class="class-image science">
+                        <i class="fas fa-flask"></i>
+                        <div class="class-badge">Science</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">Chemistry</h3>
+                        <p class="class-description">Discover the composition, properties, and reactions of substances through laboratory experiments.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>12-18 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>6 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>18 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <div class="class-card" data-category="science">
+                    <div class="class-image science">
+                        <i class="fas fa-dna"></i>
+                        <div class="class-badge">Science</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">Biology</h3>
+                        <p class="class-description">Study living organisms, their structure, function, growth, and evolution in our comprehensive biology program.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>12-18 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>6 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>18 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <!-- Technology Subjects -->
+                <div class="class-card" data-category="tech">
+                    <div class="class-image tech">
+                        <i class="fas fa-code"></i>
+                        <div class="class-badge">Technology</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">Programming</h3>
+                        <p class="class-description">Learn Python, JavaScript, and web development fundamentals to build the technology of tomorrow.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>10-18 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>4 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>15 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <div class="class-card" data-category="tech">
+                    <div class="class-image tech">
+                        <i class="fas fa-robot"></i>
+                        <div class="class-badge">Technology</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">Robotics & AI</h3>
+                        <p class="class-description">Build and program robots while learning the fundamentals of artificial intelligence and machine learning.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>12-18 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>4 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>12 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <!-- Arts & Languages -->
+                <div class="class-card" data-category="arts">
+                    <div class="class-image arts">
+                        <i class="fas fa-palette"></i>
+                        <div class="class-badge">Arts</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">Visual Arts</h3>
+                        <p class="class-description">Develop creativity and artistic skills through drawing, painting, sculpture, and digital art techniques.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>6-18 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>3 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>18 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+
+                <div class="class-card" data-category="arts">
+                    <div class="class-image language">
+                        <i class="fas fa-language"></i>
+                        <div class="class-badge">Language</div>
+                    </div>
+                    <div class="class-content">
+                        <h3 class="class-title">French Language</h3>
+                        <p class="class-description">Master French communication skills with our immersive language program focusing on speaking and writing.</p>
+                        <div class="class-details">
+                            <div class="class-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>8-18 years</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>4 hours/week</span>
+                            </div>
+                            <div class="class-detail">
+                                <i class="fas fa-users"></i>
+                                <span>16 seats</span>
+                            </div>
+                        </div>
+                        <a href="enroll-now.html" class="class-button">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section class="schedule-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Weekly Academic Schedule</h2>
+                <p>Balanced timetable covering all core subjects and extracurricular activities</p>
+            </div>
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="time-slot">8:00 - 9:00</td>
+                        <td><span class="class-name">Mathematics</span></td>
+                        <td><span class="class-name">English</span></td>
+                        <td><span class="class-name">Physics</span></td>
+                        <td><span class="class-name">Chemistry</span></td>
+                        <td><span class="class-name">Mathematics</span></td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">9:00 - 10:00</td>
+                        <td><span class="class-name">English</span></td>
+                        <td><span class="class-name">Programming</span></td>
+                        <td><span class="class-name">Biology</span></td>
+                        <td><span class="class-name">French</span></td>
+                        <td><span class="class-name">Physics</span></td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">10:30 - 11:30</td>
+                        <td><span class="class-name">Chemistry</span></td>
+                        <td><span class="class-name">Mathematics</span></td>
+                        <td><span class="class-name">English</span></td>
+                        <td><span class="class-name">Programming</span></td>
+                        <td><span class="class-name">Visual Arts</span></td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">11:30 - 12:30</td>
+                        <td><span class="class-name">Robotics & AI</span></td>
+                        <td><span class="class-name">Biology</span></td>
+                        <td><span class="class-name">French</span></td>
+                        <td><span class="class-name">Mathematics</span></td>
+                        <td><span class="class-name">Chemistry</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Curriculum Levels -->
+    <section class="curriculum-levels">
+        <div class="container">
+            <div class="section-title">
+                <h2>Academic Levels</h2>
+                <p>Structured learning paths from foundational to advanced education</p>
+            </div>
+            <div class="level-cards">
+                <div class="level-card">
+                    <div class="level-icon">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <h3>Primary Education</h3>
+                    <p>Building strong academic foundations for young learners</p>
+                    <ul class="level-list">
+                        <li><i class="fas fa-check"></i> Ages 6-11 years</li>
+                        <li><i class="fas fa-check"></i> Core subjects focus</li>
+                        <li><i class="fas fa-check"></i> Interactive learning</li>
+                        <li><i class="fas fa-check"></i> Basic computer skills</li>
+                        <li><i class="fas fa-check"></i> Creative arts</li>
+                    </ul>
+                    <a href="enroll-now.html" class="class-button">Learn More</a>
+                </div>
+                <div class="level-card">
+                    <div class="level-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Junior Secondary</h3>
+                    <p>Expanding knowledge with specialized subject introduction</p>
+                    <ul class="level-list">
+                        <li><i class="fas fa-check"></i> Ages 12-14 years</li>
+                        <li><i class="fas fa-check"></i> Science introduction</li>
+                        <li><i class="fas fa-check"></i> Language development</li>
+                        <li><i class="fas fa-check"></i> Basic programming</li>
+                        <li><i class="fas fa-check"></i> Project-based learning</li>
+                    </ul>
+                    <a href="enroll-now.html" class="class-button">Learn More</a>
+                </div>
+                <div class="level-card">
+                    <div class="level-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Senior Secondary</h3>
+                    <p>Advanced preparation for university and career paths</p>
+                    <ul class="level-list">
+                        <li><i class="fas fa-check"></i> Ages 15-18 years</li>
+                        <li><i class="fas fa-check"></i> Specialized sciences</li>
+                        <li><i class="fas fa-check"></i> Advanced technology</li>
+                        <li><i class="fas fa-check"></i> University preparation</li>
+                        <li><i class="fas fa-check"></i> Career guidance</li>
+                    </ul>
+                    <a href="enroll-now.html" class="class-button">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Start Your Academic Journey?</h2>
+            <p>Join SchoolSync Academy and get access to comprehensive education from primary to secondary levels</p>
+            <div class="cta-buttons">
+                <a href="enroll-now.html" class="btn btn-primary">Enroll Now</a>
+                <a href="contact.html" class="btn btn-secondary">Schedule a Tour</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SchoolSync Academy</h3>
+                    <p>Comprehensive education from primary to secondary levels, preparing students for academic excellence and future success.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="classes.html">Classes</a>
+                    <a href="leadership.html">Leadership</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Academic Programs</h3>
+                    <a href="#">Primary Education</a>
+                    <a href="#">Science Programs</a>
+                    <a href="#">Technology Courses</a>
+                    <a href="#">Language Studies</a>
+                    <a href="#">Arts Curriculum</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                    <p><i class="fas fa-phone"></i> +234 901 234 5678</p>
+                    <p><i class="fas fa-envelope"></i> admissions@schoolsync.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 SchoolSync Academy. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category Filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const classCards = document.querySelectorAll('.class-card');
+
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+
+                    const category = this.getAttribute('data-category');
+
+                    // Show/hide class cards based on category
+                    classCards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

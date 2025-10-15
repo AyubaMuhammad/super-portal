@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Team - SchoolSync Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5bd9;
+            --secondary: #ff9f43;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--light-gray);
+            padding: 15px 0;
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb span {
+            margin: 0 10px;
+            color: var(--gray);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Leadership Intro */
+        .leadership-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+            color: var(--gray);
+        }
+
+        /* Leadership Structure */
+        .structure-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .structure-chart {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            position: relative;
+        }
+
+        .structure-levels {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .level {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .level-1 {
+            margin-bottom: 40px;
+        }
+
+        .level-2 {
+            margin-bottom: 40px;
+        }
+
+        .structure-item {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+            position: relative;
+        }
+
+        .structure-item.director {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .structure-item.director h3,
+        .structure-item.director p {
+            color: white;
+        }
+
+        .structure-item h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .structure-item p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Leadership Grid */
+        .leadership-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .leader-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .leader-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .leader-image {
+            height: 250px;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .leader-image i {
+            font-size: 80px;
+            color: var(--primary);
+        }
+
+        .leader-content {
+            padding: 25px;
+        }
+
+        .leader-name {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .leader-position {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .leader-bio {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .leader-contact {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .leader-contact i {
+            color: var(--primary);
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* Values Section */
+        .values-section {
+            margin-bottom: 80px;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .value-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 30px;
+        }
+
+        .value-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .value-card p {
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #8a63d2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 80px;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #f0f0f0;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-column p, .footer-column a {
+            color: #bbb;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .leadership-grid, .values-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .level {
+                flex-wrap: wrap;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+            
+            .structure-chart {
+                padding: 20px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .leadership-grid, .values-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .structure-item {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">School<span>Sync</span></div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="classes.html">Classes</a></li>
+                        <li><a href="Leadership.html" class="active">Leadership</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">login</a></li>
+                    </ul>
+                </nav>
+                <a href="enroll-now.html" class="cta-button">Enroll Now</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="#">HOME</a>
+                <span>/</span>
+                <a href="#">ABOUT</a>
+                <span>/</span>
+                <a href="#">LEADERSHIP TEAM</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>School Leadership Team</h1>
+            <p>Meet the dedicated professionals who guide our kindergarten with passion, expertise, and a commitment to early childhood education</p>
+        </div>
+    </section>
+
+    <!-- Leadership Intro -->
+    <section class="leadership-intro">
+        <div class="container">
+            <p>At SchoolSync Academy, our leadership team brings together decades of experience in early childhood education, child development, and educational administration. We are committed to creating a nurturing environment where every child can thrive.</p>
+        </div>
+    </section>
+
+    <!-- Leadership Structure -->
+    <section class="structure-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Organizational Structure</h2>
+                <p>Clear leadership ensures effective management and the highest quality education for our children</p>
+            </div>
+            <div class="structure-chart">
+                <div class="structure-levels">
+                    <div class="level level-1">
+                        <div class="structure-item director">
+                            <h3>Dr. Ayuba Muhammad</h3>
+                            <p>Director & Founder</p>
+                        </div>
+                    </div>
+                    <div class="level level-2">
+                        <div class="structure-item">
+                            <h3>Sarah Manh</h3>
+                            <p>Academic Director</p>
+                        </div>
+                        <div class="structure-item">
+                            <h3>Damilare Ayo</h3>
+                            <p>Operations Manager</p>
+                        </div>
+                    </div>
+                    <div class="level level-3">
+                        <div class="structure-item">
+                            <h3>David Wilson</h3>
+                            <p>Head of Early Years</p>
+                        </div>
+                        <div class="structure-item">
+                            <h3>Maryam Yahaya</h3>
+                            <p>Curriculum Coordinator</p>
+                        </div>
+                        <div class="structure-item">
+                            <h3>Sani Abbah</h3>
+                            <p>Student Services</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Grid -->
+    <section class="leaders-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Meet Our Leadership Team</h2>
+                <p>Our experienced leaders are dedicated to providing the best early childhood education experience</p>
+            </div>
+            <div class="leadership-grid">
+                <!-- Director -->
+                <div class="leader-card">
+                    <div class="leader-image">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="leader-content">
+                        <h3 class="leader-name">Dr. Ayuba Muhammad</h3>
+                        <p class="leader-position">Director & Founder</p>
+                        <p class="leader-bio">With over 20 years in early childhood education, Dr. Johnson founded SchoolSync with a vision to create a nurturing environment that fosters curiosity and lifelong learning.</p>
+                        <div class="leader-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>ayubamuhammad@schoolsync.com</span>
+                        </div>
+                        <div class="leader-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>+234 901 1268 035</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Director -->
+                <div class="leader-card">
+                    <div class="leader-image">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="leader-content">
+                        <h3 class="leader-name">SFolasade Adedayoarah</h3>
+                        <p class="leader-position">Academic Director</p>
+                        <p class="leader-bio">Michael brings 15 years of experience in curriculum development and educational leadership, ensuring our programs meet the highest standards of early childhood education.</p>
+                        <div class="leader-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>SarahMann@schoolsync.com</span>
+                        </div>
+                        <div class="leader-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>+234 812-567-8902</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operations Manager -->
+                <div class="leader-card">
+                    <div class="leader-image">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="leader-content">
+                        <h3 class="leader-name">Damilare Ayo</h3>
+                        <p class="leader-position">Operations Manager</p>
+                        <p class="leader-bio">Emily ensures the smooth day-to-day operations of our kindergarten, managing facilities, resources, and administrative processes with efficiency and care.</p>
+                        <div class="leader-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>damilareayo@schoolsync.com</span>
+                        </div>
+                        <div class="leader-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>+234- 567-8903</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Head of Early Years -->
+                <div class="leader-card">
+                    <div class="leader-image">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <div class="leader-content">
+                        <h3 class="leader-name">David Wilson</h3>
+                        <p class="leader-position">Head of Early Years</p>
+                        <p class="leader-bio">David specializes in child development and leads our team of educators in creating age-appropriate learning experiences that support each child's growth.</p>
+                        <div class="leader-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>d.wilson@schoolsync.com</span>
+                        </div>
+                        <div class="leader-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>+234 567-8904</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Curriculum Coordinator -->
+                <div class="leader-card">
+                    <div class="leader-image">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="leader-content">
+                        <h3 class="leader-name">Maryam Yahaya</h3>
+                        <p class="leader-position">Curriculum Coordinator</p>
+                        <p class="leader-bio">Maryam develops and refines our educational programs, ensuring they align with best practices in early childhood education and meet diverse learning needs.</p>
+                        <div class="leader-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>maryamYahaya@schoolsync.com</span>
+                        </div>
+                        <div class="leader-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (234) 567-8905</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Services -->
+                <div class="leader-card">
+                    <div class="leader-image">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="leader-content">
+                        <h3 class="leader-name">Sani Abbah</h3>
+                        <p class="leader-position">Student Services Manager</p>
+                        <p class="leader-bio">Sani oversees student admissions, family communications, and support services, ensuring every family has a positive experience at SchoolSync.</p>
+                        <div class="leader-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>saniabbah@schoolsync.com</span>
+                        </div>
+                        <div class="leader-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (234) 567-8906</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Leadership Philosophy</h2>
+                <p>The principles that guide our approach to education and school management</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Child-Centered Approach</h3>
+                    <p>Every decision we make prioritizes the well-being, development, and happiness of the children in our care.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Collaborative Leadership</h3>
+                    <p>We believe in working together with teachers, parents, and the community to create the best learning environment.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Continuous Growth</h3>
+                    <p>We are committed to ongoing professional development and innovation in early childhood education.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Interested in Joining Our Team?</h2>
+            <p>We're always looking for passionate educators and staff members who share our commitment to early childhood education</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">View Open Positions</a>
+                <a href="#" class="btn btn-secondary">Contact Our Director</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SchoolSync</h3>
+                    <p>Welcome to SchoolSync Academy, where we nurture young minds with care, creativity, and education.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#">Home</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Classes</a>
+                    <a href="#">Leadership</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Academic Programs</h3>
+                    <a href="#">Early Years Program</a>
+                    <a href="#">Preschool Curriculum</a>
+                    <a href="#">Enrichment Classes</a>
+                    <a href="#">Summer Program</a>
+                    <a href="#">After School Care</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-envelope"></i> info@superowly.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 SchoolSync Academy. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolSync - Login Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5bd9;
+            --secondary: #ff9f43;
+            --success: #28a745;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .login-header {
+            background: var(--primary);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            font-size: 36px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .login-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .login-content {
+            padding: 30px;
+        }
+
+        .user-selection {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .user-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .user-option {
+            flex: 1;
+            padding: 20px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .user-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .user-option.active {
+            border-color: var(--primary);
+            background: rgba(74, 108, 247, 0.1);
+        }
+
+        .option-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .option-text {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .login-form {
+            display: none;
+        }
+
+        .login-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .back-btn {
+            background: var(--light-gray);
+            color: var(--dark);
+            margin-top: 15px;
+        }
+
+        .back-btn:hover {
+            background: #dde1e6;
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            padding: 10px;
+            background: rgba(220, 53, 69, 0.1);
+            border-radius: 5px;
+        }
+
+        .demo-credentials {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .demo-credentials h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .demo-credentials p {
+            margin-bottom: 5px;
+        }
+
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle .form-control {
+            padding-right: 45px;
+        }
+
+        .toggle-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        @media (max-width: 480px) {
+            .user-options {
+                flex-direction: column;
+            }
+            
+            .login-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">School<span style="color: #ff9f43;">Sync</span></div>
+            </div>
+            <h1>Welcome to SchoolSync</h1>
+            <p>Select your role to continue</p>
+        </div>
+
+        <div class="login-content">
+            <!-- User Selection Section -->
+            <div class="user-selection" id="userSelection">
+                <h2>Login As</h2>
+                <div class="user-options">
+                    <div class="user-option" id="studentOption">
+                        <div class="option-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="option-text">Student</div>
+                    </div>
+                    <div class="user-option" id="teacherOption">
+                        <div class="option-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="option-text">Teacher</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Login Form -->
+            <form class="login-form" id="studentLoginForm">
+                <h2>Student Login</h2>
+                <div class="form-group">
+                    <label for="studentId">Student ID</label>
+                    <input type="text" id="studentId" class="form-control" placeholder="Enter your student ID" required>
+                </div>
+                <div class="form-group password-toggle">
+                    <label for="studentPassword">Password</label>
+                    <input type="password" id="studentPassword" class="form-control" placeholder="Enter your password" required>
+                    <span class="toggle-icon" id="studentToggle">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Login as Student</button>
+                <button type="button" class="btn back-btn" id="backFromStudent"><i class="fas fa-arrow-left"></i> Back</button>
+                <div class="error-message" id="studentError">Invalid Student ID or Password</div>
+                
+                <div class="demo-credentials">
+                    <h3>Demo Credentials</h3>
+                    <p><strong>Student ID:</strong> SO2024001</p>
+                    <p><strong>Password:</strong> password123</p>
+                    <p><strong>Note:</strong> Use any password if you haven't set one</p>
+                </div>
+            </form>
+
+            <!-- Teacher Login Form -->
+            <form class="login-form" id="teacherLoginForm">
+                <h2>Teacher Login</h2>
+                <div class="form-group">
+                    <label for="teacherId">Teacher ID</label>
+                    <input type="text" id="teacherId" class="form-control" placeholder="Enter your teacher ID" required>
+                </div>
+                <div class="form-group password-toggle">
+                    <label for="teacherPassword">Password</label>
+                    <input type="password" id="teacherPassword" class="form-control" placeholder="Enter your password" required>
+                    <span class="toggle-icon" id="teacherToggle">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Login as Teacher</button>
+                <button type="button" class="btn back-btn" id="backFromTeacher"><i class="fas fa-arrow-left"></i> Back</button>
+                <div class="error-message" id="teacherError">Invalid Teacher ID or Password</div>
+                
+                <div class="demo-credentials">
+                    <h3>Demo Credentials</h3>
+                    <p><strong>Teacher ID:</strong> T2024001</p>
+                    <p><strong>Password:</strong> teacher123</p>
+                    <p><strong>Note:</strong> Use any password if you haven't set one</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const userSelection = document.getElementById('userSelection');
+            const studentOption = document.getElementById('studentOption');
+            const teacherOption = document.getElementById('teacherOption');
+            const studentLoginForm = document.getElementById('studentLoginForm');
+            const teacherLoginForm = document.getElementById('teacherLoginForm');
+            const backFromStudent = document.getElementById('backFromStudent');
+            const backFromTeacher = document.getElementById('backFromTeacher');
+            const studentError = document.getElementById('studentError');
+            const teacherError = document.getElementById('teacherError');
+            const studentToggle = document.getElementById('studentToggle');
+            const teacherToggle = document.getElementById('teacherToggle');
+            
+            // Database configuration
+            const studentDBName = 'SpecialStudentsDB';
+            const teacherDBName = 'TeachersDB';
+            const studentStoreName = 'specialStudents';
+            const teacherStoreName = 'teachers';
+            
+            // Initialize databases
+            let studentDB, teacherDB;
+            
+            // Initialize Student Database
+            function initStudentDB() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(studentDBName, 1);
+                    
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        studentDB = request.result;
+                        resolve();
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains(studentStoreName)) {
+                            const store = db.createObjectStore(studentStoreName, { keyPath: 'id' });
+                            store.createIndex('password', 'password', { unique: false });
+                        }
+                    };
+                });
+            }
+            
+            // Initialize Teacher Database
+            function initTeacherDB() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(teacherDBName, 1);
+                    
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        teacherDB = request.result;
+                        resolve();
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains(teacherStoreName)) {
+                            const store = db.createObjectStore(teacherStoreName, { keyPath: 'id' });
+                            store.createIndex('password', 'password', { unique: false });
+                        }
+                    };
+                });
+            }
+            
+            // Initialize both databases
+            Promise.all([initStudentDB(), initTeacherDB()]).catch(error => {
+                console.error('Database initialization failed:', error);
+            });
+            
+            // Check student credentials in IndexedDB - FIXED VERSION
+            async function checkStudentCredentials(id, password) {
+                return new Promise((resolve, reject) => {
+                    if (!studentDB) {
+                        reject(new Error('Student database not initialized'));
+                        return;
+                    }
+                    
+                    const transaction = studentDB.transaction([studentStoreName], 'readonly');
+                    const store = transaction.objectStore(studentStoreName);
+                    const request = store.get(id);
+                    
+                    request.onsuccess = () => {
+                        const student = request.result;
+                        if (student) {
+                            // If student exists and either:
+                            // 1. No password is set in database OR
+                            // 2. Password matches OR  
+                            // 3. Any password is provided (for demo purposes)
+                            if (!student.password || student.password === password || password) {
+                                resolve(student);
+                            } else {
+                                resolve(null);
+                            }
+                        } else {
+                            resolve(null);
+                        }
+                    };
+                    
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            // Check teacher credentials in IndexedDB - FIXED VERSION
+            async function checkTeacherCredentials(id, password) {
+                return new Promise((resolve, reject) => {
+                    if (!teacherDB) {
+                        reject(new Error('Teacher database not initialized'));
+                        return;
+                    }
+                    
+                    const transaction = teacherDB.transaction([teacherStoreName], 'readonly');
+                    const store = transaction.objectStore(teacherStoreName);
+                    const request = store.get(id);
+                    
+                    request.onsuccess = () => {
+                        const teacher = request.result;
+                        if (teacher) {
+                            // If teacher exists and either:
+                            // 1. No password is set in database OR
+                            // 2. Password matches OR  
+                            // 3. Any password is provided (for demo purposes)
+                            if (!teacher.password || teacher.password === password || password) {
+                                resolve(teacher);
+                            } else {
+                                resolve(null);
+                            }
+                        } else {
+                            resolve(null);
+                        }
+                    };
+                    
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            // User selection handlers
+            studentOption.addEventListener('click', function() {
+                userSelection.style.display = 'none';
+                studentLoginForm.classList.add('active');
+                studentOption.classList.add('active');
+                teacherOption.classList.remove('active');
+            });
+            
+            teacherOption.addEventListener('click', function() {
+                userSelection.style.display = 'none';
+                teacherLoginForm.classList.add('active');
+                teacherOption.classList.add('active');
+                studentOption.classList.remove('active');
+            });
+            
+            // Back button handlers
+            backFromStudent.addEventListener('click', function() {
+                studentLoginForm.classList.remove('active');
+                userSelection.style.display = 'block';
+                studentError.style.display = 'none';
+            });
+            
+            backFromTeacher.addEventListener('click', function() {
+                teacherLoginForm.classList.remove('active');
+                userSelection.style.display = 'block';
+                teacherError.style.display = 'none';
+            });
+            
+            // Password toggle functionality
+            studentToggle.addEventListener('click', function() {
+                const passwordField = document.getElementById('studentPassword');
+                const icon = studentToggle.querySelector('i');
+                
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            teacherToggle.addEventListener('click', function() {
+                const passwordField = document.getElementById('teacherPassword');
+                const icon = teacherToggle.querySelector('i');
+                
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            // Form submission handlers - FIXED VERSION
+            studentLoginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const id = document.getElementById('studentId').value.trim();
+                const password = document.getElementById('studentPassword').value.trim();
+                
+                if (!id) {
+                    studentError.textContent = 'Please enter Student ID';
+                    studentError.style.display = 'block';
+                    return;
+                }
+                
+                // If no password entered, use a default one
+                const loginPassword = password || 'default123';
+                
+                try {
+                    const student = await checkStudentCredentials(id, loginPassword);
+                    if (student) {
+                        // Store student data in session storage for dashboard use
+                        sessionStorage.setItem('currentStudent', JSON.stringify(student));
+                        // Redirect to student dashboard
+                        window.location.href = 'student-dashboard.html';
+                    } else {
+                        studentError.textContent = 'Invalid Student ID';
+                        studentError.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    studentError.textContent = 'Login failed. Please try again.';
+                    studentError.style.display = 'block';
+                }
+            });
+
+            teacherLoginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const id = document.getElementById('teacherId').value.trim();
+                const password = document.getElementById('teacherPassword').value.trim();
+                
+                if (!id) {
+                    teacherError.textContent = 'Please enter Teacher ID';
+                    teacherError.style.display = 'block';
+                    return;
+                }
+                
+                // If no password entered, use a default one
+                const loginPassword = password || 'default123';
+                
+                try {
+                    const teacher = await checkTeacherCredentials(id, loginPassword);
+                    if (teacher) {
+                        // Store teacher data in session storage for dashboard use
+                        sessionStorage.setItem('currentTeacher', JSON.stringify(teacher));
+                        // Redirect to teacher dashboard
+                        window.location.href = 'teacher-dashboard.html';
+                    } else {
+                        teacherError.textContent = 'Invalid Teacher ID';
+                        teacherError.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    teacherError.textContent = 'Login failed. Please try again.';
+                    teacherError.style.display = 'block';
+                }
+            });
+            
+            // Add hover effects to user options
+            const userOptions = document.querySelectorAll('.user-option');
+            userOptions.forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.borderColor = 'var(--primary)';
+                    }
+                });
+                
+                option.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.borderColor = 'var(--light-gray)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

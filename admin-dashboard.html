@@ -1,0 +1,4127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SchoolSync - Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4a6cf7;
+      --primary-dark: #3a5bd9;
+      --secondary: #ff9f43;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #333;
+      --gray: #666;
+      --light-gray: #e9ecef;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ====== SIDEBAR ====== */
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 25px 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .sidebar-header h1 {
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 5px;
+    }
+    
+    .sidebar-header p {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+    
+    .sidebar-nav {
+      flex: 1;
+    }
+    
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      margin: 6px 0;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+    
+    .sidebar a i {
+      margin-right: 12px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(5px);
+    }
+
+    /* ====== MAIN ====== */
+    .main {
+      flex: 1;
+      padding: 30px;
+      background: var(--light);
+      overflow-y: auto;
+    }
+    
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .main-header h1 {
+      color: var(--primary);
+      font-size: 28px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-info img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+
+    .panel {
+      display: none;
+    }
+    
+    .panel.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ====== DASHBOARD STATS ====== */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      font-size: 24px;
+    }
+    
+    .stat-icon.primary {
+      background: rgba(74, 108, 247, 0.2);
+      color: var(--primary);
+    }
+    
+    .stat-icon.success {
+      background: rgba(40, 167, 69, 0.2);
+      color: var(--success);
+    }
+    
+    .stat-icon.warning {
+      background: rgba(255, 193, 7, 0.2);
+      color: var(--warning);
+    }
+    
+    .stat-icon.danger {
+      background: rgba(220, 53, 69, 0.2);
+      color: var(--danger);
+    }
+    
+    .stat-info h3 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    
+    .stat-info p {
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    /* ====== CARDS ====== */
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+    
+    .card h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .card h2 i {
+      margin-right: 10px;
+    }
+
+    /* ====== FORMS ====== */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .btn i {
+      margin-right: 8px;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-success {
+      background: var(--success);
+    }
+    
+    .btn-success:hover {
+      background: #218838;
+    }
+    
+    .btn-warning {
+      background: var(--warning);
+      color: #000;
+    }
+    
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+    
+    .btn-danger {
+      background: var(--danger);
+    }
+    
+    .btn-danger:hover {
+      background: #c82333;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ====== STUDENT CARDS ====== */
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .student-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      padding: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .student-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .student-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .student-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+    
+    .student-info h3 {
+      margin-bottom: 5px;
+    }
+    
+    .student-info p {
+      color: var(--gray);
+      font-size: 14px;
+    }
+    
+    .student-details {
+      margin-bottom: 15px;
+    }
+    
+    .student-details p {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .student-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .student-actions button {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    
+    .category-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    .badge-scholarship { background: var(--success); color: white; }
+    .badge-honors { background: var(--primary); color: white; }
+    .badge-disabled { background: var(--danger); color: white; }
+    .badge-athlete { background: #8b5cf6; color: white; }
+    .badge-international { background: #ec4899; color: white; }
+    
+    /* Status indicators */
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    
+    .status-active { background-color: var(--success); }
+    .status-inactive { background-color: var(--danger); }
+
+    /* ====== TABLES ====== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    table th {
+      background-color: var(--primary);
+      color: white;
+      text-align: left;
+      padding: 15px;
+    }
+    
+    table td {
+      padding: 15px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    table tr:nth-child(even) {
+      background-color: var(--light);
+    }
+
+    /* ====== FILTERS ====== */
+    .filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .filters select, .filters input {
+      padding: 10px 12px;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    /* ====== SEARCH SECTION ====== */
+    .search-section {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* ====== NOTIFICATION ====== */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background: var(--success);
+    }
+    
+    .notification.error {
+      background: var(--danger);
+    }
+    
+    .notification.warning {
+      background: var(--warning);
+      color: #000;
+    }
+
+    /* ====== MODAL ====== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    /* ====== DARK MODE ====== */
+    body.dark-mode {
+      background-color: #1e1e2f;
+      color: #f0f0f0;
+    }
+    
+    body.dark-mode .main {
+      background-color: #2c2c3e;
+    }
+    
+    body.dark-mode .sidebar {
+      background: linear-gradient(to bottom, #111827, #0f172a);
+    }
+    
+    body.dark-mode .card,
+    body.dark-mode .stat-card,
+    body.dark-mode .student-card {
+      background-color: #3a3a52;
+      color: #f0f0f0;
+    }
+    
+    body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3,
+    body.dark-mode p {
+      color: #f0f0f0;
+    }
+    
+    body.dark-mode table, 
+    body.dark-mode th, 
+    body.dark-mode td {
+      border-color: #444;
+    }
+    
+    body.dark-mode th {
+      background-color: #333;
+    }
+    
+    body.dark-mode .form-control {
+      background-color: #2c2c3e;
+      color: #f0f0f0;
+      border-color: #444;
+    }
+    
+    body.dark-mode .search-section {
+      background-color: #2c2c3e;
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 992px) {
+      .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .students-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        padding: 20px;
+      }
+      
+      .sidebar-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      
+      .sidebar a {
+        flex: 1 1 48%;
+        margin: 5px;
+        font-size: 14px;
+        justify-content: center;
+        text-align: center;
+      }
+      
+      .sidebar a i {
+        margin-right: 0;
+        margin-bottom: 5px;
+        display: block;
+      }
+      
+      .main {
+        padding: 20px;
+      }
+      
+      .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .user-info {
+        margin-top: 15px;
+      }
+      
+      .dashboard-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .students-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .filters {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .sidebar a {
+        flex: 1 1 100%;
+      }
+      
+      .student-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h1><i class="fas fa-graduation-cap"></i> SchoolSync Admin</h1>
+      <p>School Management System</p>
+    </div>
+    
+    <div class="sidebar-nav">
+      <a href="#" class="active" data-panel="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="#" data-panel="special-students"><i class="fas fa-user-graduate"></i> Special Students</a>
+      <a href="#" data-panel="teacher"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
+      <a href="#" data-panel="classes"><i class="fas fa-book"></i> Classes</a>
+      <a href="#" data-panel="attendance"><i class="fas fa-clipboard-check"></i> Attendance</a>
+      <a href="#" data-panel="admissions"><i class="fas fa-file-signature"></i> Admissions</a>
+      <a href="#" data-panel="payments"><i class="fas fa-credit-card"></i> Payments</a>
+      <a href="#" data-panel="reports"><i class="fas fa-chart-bar"></i> Reports</a>
+      <a href="#" data-panel="messaging"><i class="fas fa-comments"></i> Messaging</a>
+      <a href="#" data-panel="audit"><i class="fas fa-history"></i> Audit</a>
+      <a href="#" data-panel="settings"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="main-header">
+      <h1 id="panelTitle">Dashboard</h1>
+      <div class="user-info">
+        <img src="https://placehold.co/45x45" alt="Admin" />
+        <span>Administrator</span>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="panel active">
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-icon primary">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="specialStudentsCount">25</h3>
+            <p>Special Students</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon success">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="teacherCount">18</h3>
+            <p>Teachers</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon warning">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="studentCount">245</h3>
+            <p>Total Students</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon danger">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="classCount">12</h3>
+            <p>Classes</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="search-section">
+        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+        <div class="action-buttons">
+          <button class="btn" onclick="showPanel('special-students')"><i class="fas fa-plus"></i> Add New Student</button>
+          <button class="btn btn-success" onclick="showPanel('teacher')"><i class="fas fa-user-plus"></i> Add Teacher</button>
+          <button class="btn btn-warning" onclick="app.exportData()"><i class="fas fa-download"></i> Export Data</button>
+          <button class="btn btn-danger" onclick="app.generateReport()"><i class="fas fa-chart-pie"></i> Generate Report</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2><i class="fas fa-chart-line"></i> Recent Activity</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>User</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="recentActivity">
+            <tr>
+              <td>2024-05-15</td>
+              <td>New student registration</td>
+              <td>Alex Johnson</td>
+              <td>Grade 5 - Blue</td>
+            </tr>
+            <tr>
+              <td>2024-05-14</td>
+              <td>Teacher assignment</td>
+              <td>Ms. Sarah</td>
+              <td>Mathematics - Grade 5</td>
+            </tr>
+            <tr>
+              <td>2024-05-13</td>
+              <td>Payment received</td>
+              <td>Emma Wilson</td>
+              <td>Tuition fee</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SPECIAL STUDENT MANAGEMENT -->
+    <section id="special-students" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-user-graduate"></i> Special Student Management</h2>
+        
+        <div class="filters">
+          <select id="specialFilter" class="form-control">
+            <option value="all">All Special Students</option>
+            <option value="scholarship">Scholarship Students</option>
+            <option value="honors">Honors Program</option>
+            <option value="disabled">Special Needs</option>
+            <option value="athlete">Student Athletes</option>
+            <option value="international">International Students</option>
+          </select>
+          <input type="text" id="specialSearch" class="form-control" placeholder="Search special students...">
+          <button class="btn" onclick="app.renderSpecialStudents()"><i class="fas fa-search"></i> Search</button>
+        </div>
+
+        <form id="specialStudentsForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="specialName">Name</label>
+              <input type="text" id="specialName" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="specialId">ID</label>
+              <input type="text" id="specialId" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="specialClass">Class</label>
+              <input type="text" id="specialClass" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="specialCategory">Special Category</label>
+              <select id="specialCategory" class="form-control" required>
+                <option value="">Select Category</option>
+                <option value="scholarship">Scholarship</option>
+                <option value="honors">Honors Program</option>
+                <option value="disabled">Special Needs</option>
+                <option value="athlete">Student Athlete</option>
+                <option value="international">International Student</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="specialEmail">Email</label>
+            <input type="email" id="specialEmail" class="form-control" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="specialPhoto">Upload Photo</label>
+              <input type="file" id="specialPhoto" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+              <img id="specialPhotoPreview" src="https://placehold.co/100x100" alt="Profile" width="100" height="100" style="border-radius: 8px;" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="specialNotes">Special Notes</label>
+            <textarea id="specialNotes" class="form-control" rows="3" placeholder="Additional information about special requirements or accommodations"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="specialStatus">Status</label>
+              <select id="specialStatus" class="form-control">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="enrollmentDate">Enrollment Date</label>
+              <input type="date" id="enrollmentDate" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="specialPassword">Password</label>
+            <input type="password" id="specialPassword" class="form-control" required />
+          </div>
+
+          <div class="action-buttons">
+            <button type="submit" id="submitSpecialBtn" class="btn"><i class="fas fa-plus"></i> Add Special Student</button>
+            <button type="button" id="cancelEditBtn" class="btn btn-warning" style="display:none;" onclick="app.cancelEdit()"><i class="fas fa-times"></i> Cancel</button>
+            <button type="button" class="btn btn-danger" onclick="app.clearForm()"><i class="fas fa-trash"></i> Clear Form</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2><i class="fas fa-list"></i> Special Students List</h2>
+        <div id="specialStudentsList" class="students-grid"></div>
+      </div>
+    </section>
+
+    <!-- TEACHER MANAGEMENT -->
+    <section id="teacher" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-chalkboard-teacher"></i> Teacher Management</h2>
+        
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon primary">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalTeacherCount">18</h3>
+              <p>Total Teachers</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon success">
+              <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="activeClassCount">12</h3>
+              <p>Active Classes</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="teacherForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="teacherNameInput">Teacher Name</label>
+              <input type="text" id="teacherNameInput" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="teacherIDInput">Teacher ID</label>
+              <input type="text" id="teacherIDInput" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="teacherClassInput">Class</label>
+              <input type="text" id="teacherClassInput" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="teacherEmailInput">Email</label>
+              <input type="email" id="teacherEmailInput" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="teacherPasswordInput">Password</label>
+            <input type="password" id="teacherPasswordInput" class="form-control" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="teacherPhotoInput">Upload Photo</label>
+              <input type="file" id="teacherPhotoInput" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+              <img id="teacherPhotoPreview" src="https://placehold.co/100x100" alt="Preview" width="100" height="100" style="border-radius:50%;object-fit:cover;" />
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button type="submit" id="saveTeacherBtn" class="btn">
+              <span id="saveButtonText"><i class="fas fa-plus"></i> Add Teacher</span>
+            </button>
+            <button type="reset" class="btn btn-danger"><i class="fas fa-trash"></i> Clear</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2><i class="fas fa-list"></i> Teacher List</h2>
+        <table id="teacherTable">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Name</th>
+              <th>ID</th>
+              <th>Class</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+<div class="action-buttons" style="margin-top: 20px;">
+    <button class="btn btn-success" onclick="teacherManager.exportTeachers()">
+        <i class="fas fa-download"></i> Export Teachers
+    </button>
+    <button class="btn btn-warning" onclick="teacherManager.generateSampleData()">
+        <i class="fas fa-magic"></i> Generate Sample Data
+    </button>
+    <input type="file" id="teacherImportFile" accept=".json" style="display: none;" 
+           onchange="teacherManager.importTeachers(this.files[0])">
+    <button class="btn btn-info" onclick="document.getElementById('teacherImportFile').click()">
+        <i class="fas fa-upload"></i> Import Teachers
+    </button>
+    <button class="btn btn-danger" onclick="teacherManager.resetForm()">
+        <i class="fas fa-trash"></i> Clear Form
+    </button>
+</div>
+*/
+    </section>
+
+    <!-- OTHER PANELS -->
+        <!-- CLASS MANAGEMENT SECTION -->
+    <section id="classes" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-book"></i> Class Management</h2>
+        
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon primary">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalClassCount">12</h3>
+              <p>Total Classes</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon success">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalStudentsInClasses">245</h3>
+              <p>Total Students</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon warning">
+              <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalTeachersInClasses">18</h3>
+              <p>Assigned Teachers</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="classForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="className">Class Name</label>
+              <input type="text" id="className" class="form-control" placeholder="e.g., Grade 5 - Blue" required />
+            </div>
+            <div class="form-group">
+              <label for="classCode">Class Code</label>
+              <input type="text" id="classCode" class="form-control" placeholder="e.g., G5-BLUE" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="classTeacher">Assigned Teacher</label>
+              <select id="classTeacher" class="form-control">
+                <option value="">Select Teacher</option>
+                <!-- Will be populated by JavaScript -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="classCapacity">Class Capacity</label>
+              <input type="number" id="classCapacity" class="form-control" placeholder="30" min="1" max="50" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="classGrade">Grade Level</label>
+              <select id="classGrade" class="form-control" required>
+                <option value="">Select Grade</option>
+                <option value="Kindergarten">Kindergarten</option>
+                <option value="Grade 1">Grade 1</option>
+                <option value="Grade 2">Grade 2</option>
+                <option value="Grade 3">Grade 3</option>
+                <option value="Grade 4">Grade 4</option>
+                <option value="Grade 5">Grade 5</option>
+                <option value="Grade 6">Grade 6</option>
+                <option value="Grade 7">Grade 7</option>
+                <option value="Grade 8">Grade 8</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="classRoom">Room Number</label>
+              <input type="text" id="classRoom" class="form-control" placeholder="e.g., Room 101" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="classSchedule">Class Schedule</label>
+            <textarea id="classSchedule" class="form-control" rows="3" placeholder="Enter class schedule details..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="classDescription">Description</label>
+            <textarea id="classDescription" class="form-control" rows="2" placeholder="Brief description of the class..."></textarea>
+          </div>
+
+          <div class="action-buttons">
+            <button type="submit" id="saveClassBtn" class="btn">
+              <i class="fas fa-plus"></i> Add Class
+            </button>
+            <button type="button" id="cancelClassEditBtn" class="btn btn-warning" style="display:none;">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="reset" class="btn btn-danger">
+              <i class="fas fa-trash"></i> Clear Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2><i class="fas fa-list"></i> Class List</h2>
+        
+        <div class="filters">
+          <select id="classGradeFilter" class="form-control">
+            <option value="all">All Grades</option>
+            <option value="Kindergarten">Kindergarten</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+          </select>
+          <input type="text" id="classSearch" class="form-control" placeholder="Search classes...">
+          <button class="btn" onclick="classManager.searchClasses()">
+            <i class="fas fa-search"></i> Search
+          </button>
+        </div>
+
+        <div id="classesList" class="students-grid">
+          <!-- Classes will be populated here -->
+        </div>
+      </div>
+
+      <div class="action-buttons" style="margin-top: 20px;">
+        <button class="btn btn-success" onclick="classManager.exportClasses()">
+          <i class="fas fa-download"></i> Export Classes
+        </button>
+        <button class="btn btn-warning" onclick="classManager.generateSampleData()">
+          <i class="fas fa-magic"></i> Generate Sample Data
+        </button>
+        <input type="file" id="classImportFile" accept=".json" style="display: none;" 
+               onchange="classManager.importClasses(this.files[0])">
+        <button class="btn btn-info" onclick="document.getElementById('classImportFile').click()">
+          <i class="fas fa-upload"></i> Import Classes
+        </button>
+      </div>
+    </section>
+
+    <section id="attendance" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-clipboard-check"></i> Attendance Tracking</h2>
+        <p>Attendance tracking features will be implemented here.</p>
+      </div>
+    </section>
+
+        <!-- ADMISSION MANAGEMENT SECTION -->
+    <section id="admissions" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-file-signature"></i> Admission Management</h2>
+        
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon primary">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalApplications">0</h3>
+              <p>Total Applications</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon warning">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="pendingApplications">0</h3>
+              <p>Pending Review</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon success">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="approvedApplications">0</h3>
+              <p>Approved</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon danger">
+              <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="rejectedApplications">0</h3>
+              <p>Rejected</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="search-section">
+          <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+          <div class="action-buttons">
+            <button class="btn" onclick="admissionManager.showNewApplicationForm()">
+              <i class="fas fa-plus"></i> New Application
+            </button>
+            <button class="btn btn-success" onclick="admissionManager.processBatchApplications()">
+              <i class="fas fa-cogs"></i> Process Batch
+            </button>
+            <button class="btn btn-warning" onclick="admissionManager.exportAdmissions()">
+              <i class="fas fa-download"></i> Export Data
+            </button>
+            <button class="btn btn-info" onclick="admissionManager.generateAdmissionReport()">
+              <i class="fas fa-chart-bar"></i> Generate Report
+            </button>
+          </div>
+        </div>
+
+        <form id="admissionForm" style="display: none;">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="applicantName">Student Name *</label>
+              <input type="text" id="applicantName" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="applicantDOB">Date of Birth *</label>
+              <input type="date" id="applicantDOB" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="applicantGender">Gender</label>
+              <select id="applicantGender" class="form-control">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="applicantGrade">Applying for Grade *</label>
+              <select id="applicantGrade" class="form-control" required>
+                <option value="">Select Grade</option>
+                <option value="Kindergarten">Kindergarten</option>
+                <option value="Grade 1">Grade 1</option>
+                <option value="Grade 2">Grade 2</option>
+                <option value="Grade 3">Grade 3</option>
+                <option value="Grade 4">Grade 4</option>
+                <option value="Grade 5">Grade 5</option>
+                <option value="Grade 6">Grade 6</option>
+                <option value="Grade 7">Grade 7</option>
+                <option value="Grade 8">Grade 8</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="parentName">Parent/Guardian Name *</label>
+              <input type="text" id="parentName" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="parentEmail">Parent Email *</label>
+              <input type="email" id="parentEmail" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="parentPhone">Parent Phone *</label>
+              <input type="tel" id="parentPhone" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="emergencyContact">Emergency Contact</label>
+              <input type="text" id="emergencyContact" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="homeAddress">Home Address</label>
+            <textarea id="homeAddress" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="previousSchool">Previous School</label>
+              <input type="text" id="previousSchool" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="academicLevel">Previous Academic Level</label>
+              <input type="text" id="academicLevel" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="specialNeeds">Special Needs/Requirements</label>
+            <textarea id="specialNeeds" class="form-control" rows="2" placeholder="Any special educational needs, medical conditions, or accommodations required..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="applicationDate">Application Date</label>
+              <input type="date" id="applicationDate" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="applicationStatus">Application Status</label>
+              <select id="applicationStatus" class="form-control">
+                <option value="pending">Pending</option>
+                <option value="under-review">Under Review</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="waitlisted">Waitlisted</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="applicationNotes">Admission Notes</label>
+            <textarea id="applicationNotes" class="form-control" rows="3" placeholder="Admission committee notes, interview feedback, or special considerations..."></textarea>
+          </div>
+
+          <div class="action-buttons">
+            <button type="submit" id="saveAdmissionBtn" class="btn">
+              <i class="fas fa-save"></i> Save Application
+            </button>
+            <button type="button" class="btn btn-warning" onclick="admissionManager.hideForm()">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="button" class="btn btn-danger" onclick="admissionManager.clearForm()">
+              <i class="fas fa-trash"></i> Clear Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2><i class="fas fa-list"></i> Admission Applications</h2>
+        
+        <div class="filters">
+          <select id="admissionStatusFilter" class="form-control">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="under-review">Under Review</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="waitlisted">Waitlisted</option>
+          </select>
+          <select id="admissionGradeFilter" class="form-control">
+            <option value="all">All Grades</option>
+            <option value="Kindergarten">Kindergarten</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+          </select>
+          <input type="text" id="admissionSearch" class="form-control" placeholder="Search applications...">
+          <button class="btn" onclick="admissionManager.searchApplications()">
+            <i class="fas fa-search"></i> Search
+          </button>
+        </div>
+
+        <div id="admissionsList" class="students-grid">
+          <!-- Applications will be populated here -->
+        </div>
+      </div>
+
+      <div class="action-buttons" style="margin-top: 20px;">
+        <button class="btn btn-success" onclick="admissionManager.generateSampleData()">
+          <i class="fas fa-magic"></i> Generate Sample Data
+        </button>
+        <input type="file" id="admissionImportFile" accept=".json" style="display: none;" 
+               onchange="admissionManager.importApplications(this.files[0])">
+        <button class="btn btn-info" onclick="document.getElementById('admissionImportFile').click()">
+          <i class="fas fa-upload"></i> Import Applications
+        </button>
+        <button class="btn btn-danger" onclick="admissionManager.bulkDelete()">
+          <i class="fas fa-trash"></i> Bulk Delete
+        </button>
+      </div>
+    </section>
+
+    <section id="payments" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-credit-card"></i> Payment Management</h2>
+        <p>Payment management features will be implemented here.</p>
+      </div>
+    </section>
+
+    <section id="reports" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-chart-bar"></i> Reports & Analytics</h2>
+        <p>Reporting features will be implemented here.</p>
+      </div>
+    </section>
+
+    <section id="messaging" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-comments"></i> Messaging System</h2>
+        <p>Messaging features will be implemented here.</p>
+      </div>
+    </section>
+
+    <section id="audit" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-history"></i> Audit Logs</h2>
+        <p>Audit log features will be implemented here.</p>
+      </div>
+    </section>
+
+    <section id="settings" class="panel">
+      <div class="card">
+        <h2><i class="fas fa-cog"></i> System Settings</h2>
+        <p>System settings will be implemented here.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- NOTIFICATION -->
+  <div class="notification" id="notification"></div>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div id="modalContent"></div>
+      <button class="btn" onclick="app.closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up navigation
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const panelId = this.getAttribute('data-panel');
+          showPanel(panelId);
+          
+          // Update active state
+          document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Initialize data display
+      renderSpecialStudents();
+      renderTeachers();
+      updateDashboardStats();
+    });
+
+    // Panel navigation
+    function showPanel(panelId) {
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      document.getElementById(panelId).classList.add('active');
+      
+      // Update panel title
+      const titles = {
+        dashboard: "Dashboard",
+        "special-students": "Special Students",
+        teacher: "Teacher Management",
+        classes: "Class Management",
+        attendance: "Attendance Tracking",
+        admissions: "Admissions Management",
+        payments: "Payment Management",
+        reports: "Reports & Analytics",
+        messaging: "Messaging System",
+        audit: "Audit Logs",
+        settings: "System Settings"
+      };
+      document.getElementById('panelTitle').textContent = titles[panelId];
+    }
+
+    // Update dashboard statistics
+    function updateDashboardStats() {
+      // These would normally come from your database
+      document.getElementById('specialStudentsCount').textContent = '25';
+      document.getElementById('teacherCount').textContent = '18';
+      document.getElementById('studentCount').textContent = '245';
+      document.getElementById('classCount').textContent = '12';
+      document.getElementById('totalTeacherCount').textContent = '18';
+      document.getElementById('activeClassCount').textContent = '12';
+    }
+
+    // Notification system
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Modal system
+    function openModal(content) {
+      document.getElementById('modalContent').innerHTML = content;
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    // Export functions (placeholder)
+    function exportData() {
+      showNotification('Data export started successfully!', 'success');
+    }
+
+    function generateReport() {
+      showNotification('Report generation completed!', 'success');
+    }
+
+    // Global app object
+    const app = {
+      exportData,
+      generateReport,
+      closeModal,
+      renderSpecialStudents: function() {
+        // This would normally fetch from your database
+        showNotification('Special students list updated', 'success');
+      },
+      cancelEdit: function() {
+        document.getElementById('submitSpecialBtn').innerHTML = '<i class="fas fa-plus"></i> Add Special Student';
+        document.getElementById('cancelEditBtn').style.display = 'none';
+        document.getElementById('specialStudentsForm').reset();
+        document.getElementById('specialPhotoPreview').src = 'https://placehold.co/100x100';
+      },
+      clearForm: function() {
+        document.getElementById('specialStudentsForm').reset();
+        document.getElementById('specialPhotoPreview').src = 'https://placehold.co/100x100';
+      }
+    };
+
+// Special Students Management System with IndexedDB
+const specialStudentsManager = {
+    dbName: 'SpecialStudentsDB',
+    dbVersion: 1,
+    storeName: 'specialStudents',
+    
+    // Initialize the module
+    init: function() {
+        this.setupEventListeners();
+        this.initDB().then(() => {
+            this.renderStudents();
+            this.updateStats();
+        }).catch(error => {
+            console.error('Failed to initialize database:', error);
+            showNotification('Failed to initialize database', 'error');
+        });
+    },
+    
+    // Initialize IndexedDB
+    initDB: function() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.dbVersion);
+            
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+                this.db = request.result;
+                resolve();
+            };
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(this.storeName)) {
+                    const store = db.createObjectStore(this.storeName, { keyPath: 'id' });
+                    store.createIndex('category', 'category', { unique: false });
+                    store.createIndex('status', 'status', { unique: false });
+                    store.createIndex('className', 'className', { unique: false });
+                }
+            };
+        });
+    },
+    
+    // Setup event listeners
+    setupEventListeners: function() {
+        // Form submission
+        document.getElementById('specialStudentsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmit();
+        });
+        
+        // Search functionality
+        document.getElementById('specialSearch').addEventListener('input', (e) => {
+            this.handleSearch(e.target.value);
+        });
+        
+        // Filter functionality
+        document.getElementById('specialFilter').addEventListener('change', (e) => {
+            this.handleFilter(e.target.value);
+        });
+        
+        // Photo preview
+        document.getElementById('specialPhoto').addEventListener('change', (e) => {
+            this.previewImage(e.target, 'specialPhotoPreview');
+        });
+    },
+    
+    // Handle form submission
+    handleFormSubmit: function() {
+        const formData = this.getFormData();
+        
+        if (!this.validateForm(formData)) {
+            return;
+        }
+        
+        const editingId = document.getElementById('submitSpecialBtn').dataset.editingId;
+        
+        if (editingId) {
+            // Update existing student
+            this.updateStudent(editingId, formData).then(() => {
+                showNotification('Student updated successfully!', 'success');
+                this.resetForm();
+                this.renderStudents();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error updating student:', error);
+                showNotification('Error updating student', 'error');
+            });
+        } else {
+            // Add new student
+            this.addStudent(formData).then(() => {
+                showNotification('Student added successfully!', 'success');
+                this.resetForm();
+                this.renderStudents();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error adding student:', error);
+                showNotification('Error adding student', 'error');
+            });
+        }
+    },
+    
+    // Get form data
+    getFormData: function() {
+        return {
+            id: document.getElementById('specialId').value.trim(),
+            name: document.getElementById('specialName').value.trim(),
+            className: document.getElementById('specialClass').value.trim(),
+            category: document.getElementById('specialCategory').value,
+            email: document.getElementById('specialEmail').value.trim(),
+            notes: document.getElementById('specialNotes').value.trim(),
+            status: document.getElementById('specialStatus').value,
+            enrollmentDate: document.getElementById('enrollmentDate').value,
+            password: document.getElementById('specialPassword').value,
+            photo: document.getElementById('specialPhotoPreview').src,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+    },
+    
+    // Validate form data
+    validateForm: function(data) {
+        if (!data.id || !data.name || !data.className || !data.category) {
+            showNotification('Please fill in all required fields', 'error');
+            return false;
+        }
+        
+        // For new students, check if ID already exists
+        const editingId = document.getElementById('submitSpecialBtn').dataset.editingId;
+        if (!editingId) {
+            this.getStudent(data.id).then(existingStudent => {
+                if (existingStudent) {
+                    showNotification('Student ID already exists!', 'error');
+                    return false;
+                }
+            }).catch(error => {
+                console.error('Error checking student ID:', error);
+            });
+        }
+        
+        return true;
+    },
+    
+    // Add new student
+    addStudent: function(studentData) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.add(studentData);
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Update existing student
+    updateStudent: function(studentId, studentData) {
+        return new Promise((resolve, reject) => {
+            // First get the existing student to preserve createdAt
+            this.getStudent(studentId).then(existingStudent => {
+                const updatedStudent = {
+                    ...existingStudent,
+                    ...studentData,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+                const request = store.put(updatedStudent);
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            }).catch(error => reject(error));
+        });
+    },
+    
+    // Get single student by ID
+    getStudent: function(studentId) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.get(studentId);
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Get all students
+    getAllStudents: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.getAll();
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Delete student
+    deleteStudent: function(studentId) {
+        if (confirm('Are you sure you want to delete this student?')) {
+            this.removeStudent(studentId).then(() => {
+                this.renderStudents();
+                this.updateStats();
+                showNotification('Student deleted successfully!', 'success');
+            }).catch(error => {
+                console.error('Error deleting student:', error);
+                showNotification('Error deleting student', 'error');
+            });
+        }
+    },
+    
+    // Remove student from database
+    removeStudent: function(studentId) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.delete(studentId);
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Edit student
+    editStudent: function(studentId) {
+        this.getStudent(studentId).then(student => {
+            if (student) {
+                // Fill form with student data
+                document.getElementById('specialId').value = student.id;
+                document.getElementById('specialName').value = student.name;
+                document.getElementById('specialClass').value = student.className;
+                document.getElementById('specialCategory').value = student.category;
+                document.getElementById('specialEmail').value = student.email || '';
+                document.getElementById('specialNotes').value = student.notes || '';
+                document.getElementById('specialStatus').value = student.status;
+                document.getElementById('enrollmentDate').value = student.enrollmentDate || '';
+                document.getElementById('specialPassword').value = student.password || '';
+                document.getElementById('specialPhotoPreview').src = student.photo || 'https://placehold.co/100x100';
+                
+                // Update button to show editing mode
+                const submitBtn = document.getElementById('submitSpecialBtn');
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Student';
+                submitBtn.dataset.editingId = studentId;
+                
+                // Show cancel button
+                document.getElementById('cancelEditBtn').style.display = 'inline-block';
+                
+                // Scroll to form
+                document.getElementById('specialStudentsForm').scrollIntoView({ behavior: 'smooth' });
+            }
+        }).catch(error => {
+            console.error('Error loading student for editing:', error);
+            showNotification('Error loading student data', 'error');
+        });
+    },
+    
+    // Cancel editing
+    cancelEdit: function() {
+        this.resetForm();
+    },
+    
+    // Reset form
+    resetForm: function() {
+        document.getElementById('specialStudentsForm').reset();
+        document.getElementById('specialPhotoPreview').src = 'https://placehold.co/100x100';
+        
+        const submitBtn = document.getElementById('submitSpecialBtn');
+        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Special Student';
+        delete submitBtn.dataset.editingId;
+        
+        document.getElementById('cancelEditBtn').style.display = 'none';
+    },
+    
+    // Render students list
+    renderStudents: function(studentsToRender = null) {
+        const container = document.getElementById('specialStudentsList');
+        
+        if (studentsToRender) {
+            this.displayStudents(container, studentsToRender);
+        } else {
+            this.getAllStudents().then(students => {
+                this.displayStudents(container, students);
+            }).catch(error => {
+                console.error('Error loading students:', error);
+                container.innerHTML = this.getErrorMessage('Failed to load students');
+            });
+        }
+    },
+    
+    // Display students in the container
+    displayStudents: function(container, students) {
+        container.innerHTML = '';
+        
+        if (students.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--gray);">
+                    <i class="fas fa-user-slash" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <h3>No special students found</h3>
+                    <p>Add your first special student using the form above.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        students.forEach(student => {
+            const card = document.createElement('div');
+            card.className = 'student-card';
+            card.innerHTML = this.createStudentCardHTML(student);
+            container.appendChild(card);
+        });
+    },
+    
+    // Create student card HTML
+    createStudentCardHTML: function(student) {
+        const categoryLabels = {
+            scholarship: 'Scholarship',
+            honors: 'Honors Program',
+            disabled: 'Special Needs',
+            athlete: 'Student Athlete',
+            international: 'International Student'
+        };
+        
+        return `
+            <div class="student-header">
+                <img src="${student.photo || 'https://placehold.co/60x60'}" class="student-avatar" alt="${student.name}">
+                <div class="student-info">
+                    <h3>${student.name} <span class="category-badge badge-${student.category}">${categoryLabels[student.category]}</span></h3>
+                    <p>ID: ${student.id} | Class: ${student.className}</p>
+                </div>
+            </div>
+            <div class="student-details">
+                <p><strong>Email:</strong> ${student.email || 'N/A'}</p>
+                <p><strong>Status:</strong> <span class="status-indicator status-${student.status}"></span>${student.status}</p>
+                <p><strong>Enrolled:</strong> ${student.enrollmentDate || 'N/A'}</p>
+                <p><strong>Notes:</strong> ${student.notes || 'No special notes'}</p>
+            </div>
+            <div class="student-actions">
+                <button class="btn btn-warning" onclick="specialStudentsManager.editStudent('${student.id}')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-danger" onclick="specialStudentsManager.deleteStudent('${student.id}')">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        `;
+    },
+    
+    // Handle search
+    handleSearch: function(searchTerm) {
+        if (!searchTerm) {
+            this.renderStudents();
+            return;
+        }
+        
+        this.getAllStudents().then(allStudents => {
+            const filtered = allStudents.filter(student => 
+                student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                student.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                student.className.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                student.email.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            this.renderStudents(filtered);
+        }).catch(error => {
+            console.error('Error searching students:', error);
+        });
+    },
+    
+    // Handle filter
+    handleFilter: function(filterValue) {
+        if (filterValue === 'all') {
+            this.renderStudents();
+            return;
+        }
+        
+        this.getAllStudents().then(allStudents => {
+            const filtered = allStudents.filter(student => student.category === filterValue);
+            this.renderStudents(filtered);
+        }).catch(error => {
+            console.error('Error filtering students:', error);
+        });
+    },
+    
+    // Update statistics
+    updateStats: function() {
+        this.getAllStudents().then(students => {
+            const totalStudents = students.length;
+            const activeStudents = students.filter(s => s.status === 'active').length;
+            
+            // Update dashboard stats
+            document.getElementById('specialStudentsCount').textContent = totalStudents;
+            
+            // Update category counts
+            const categoryCounts = {
+                scholarship: students.filter(s => s.category === 'scholarship').length,
+                honors: students.filter(s => s.category === 'honors').length,
+                disabled: students.filter(s => s.category === 'disabled').length,
+                athlete: students.filter(s => s.category === 'athlete').length,
+                international: students.filter(s => s.category === 'international').length
+            };
+            
+            // You can update any other UI elements with these counts
+            console.log('Category counts:', categoryCounts);
+        }).catch(error => {
+            console.error('Error updating stats:', error);
+        });
+    },
+    
+    // Export students data
+    exportStudents: function() {
+        this.getAllStudents().then(students => {
+            const dataStr = JSON.stringify(students, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `special-students-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showNotification('Student data exported successfully!', 'success');
+        }).catch(error => {
+            console.error('Error exporting students:', error);
+            showNotification('Error exporting student data', 'error');
+        });
+    },
+    
+    // Import students data
+    importStudents: function(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                
+                if (Array.isArray(importedData)) {
+                    this.getAllStudents().then(existingStudents => {
+                        const importPromises = importedData.map(newStudent => {
+                            // Check if student already exists
+                            const exists = existingStudents.some(student => student.id === newStudent.id);
+                            if (!exists) {
+                                // Add createdAt and updatedAt if missing
+                                const studentToAdd = {
+                                    ...newStudent,
+                                    createdAt: newStudent.createdAt || new Date().toISOString(),
+                                    updatedAt: new Date().toISOString()
+                                };
+                                return this.addStudent(studentToAdd);
+                            }
+                            return Promise.resolve();
+                        });
+                        
+                        Promise.all(importPromises).then(() => {
+                            this.renderStudents();
+                            this.updateStats();
+                            showNotification('Students imported successfully!', 'success');
+                        }).catch(error => {
+                            console.error('Error during import:', error);
+                            showNotification('Error importing some students', 'error');
+                        });
+                    }).catch(error => {
+                        console.error('Error checking existing students:', error);
+                        showNotification('Error importing file', 'error');
+                    });
+                } else {
+                    showNotification('Invalid file format', 'error');
+                }
+            } catch (error) {
+                showNotification('Error importing file', 'error');
+            }
+        };
+        reader.readAsText(file);
+    },
+    
+    // Preview image
+    previewImage: function(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = input.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function() {
+                preview.src = reader.result;
+            });
+            reader.readAsDataURL(file);
+        }
+    },
+    
+    // Generate sample data (for testing)
+    generateSampleData: function() {
+        const sampleStudents = [
+            {
+                id: 'SO2024001',
+                name: 'Alex Johnson',
+                className: 'Grade 5 - Blue',
+                category: 'scholarship',
+                email: 'alex.johnson@superowly.edu',
+                status: 'active',
+                enrollmentDate: '2024-01-15',
+                notes: 'Excellent in mathematics, receives full scholarship',
+                password: 'password123',
+                photo: 'https://placehold.co/100x100',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            {
+                id: 'SO2024002',
+                name: 'Emma Wilson',
+                className: 'Grade 5 - Blue',
+                category: 'honors',
+                email: 'emma.wilson@superowly.edu',
+                status: 'active',
+                enrollmentDate: '2024-01-15',
+                notes: 'Honors program, advanced science curriculum',
+                password: 'password123',
+                photo: 'https://placehold.co/100x100',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            {
+                id: 'SO2024003',
+                name: 'Noah Brown',
+                className: 'Grade 4 - Green',
+                category: 'disabled',
+                email: 'noah.brown@superowly.edu',
+                status: 'active',
+                enrollmentDate: '2024-01-10',
+                notes: 'Special needs - requires extra time for tests and assignments',
+                password: 'password123',
+                photo: 'https://placehold.co/100x100',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+        ];
+        
+        // Clear existing data first
+        this.clearAllStudents().then(() => {
+            const addPromises = sampleStudents.map(student => this.addStudent(student));
+            return Promise.all(addPromises);
+        }).then(() => {
+            this.renderStudents();
+            this.updateStats();
+            showNotification('Sample data generated!', 'success');
+        }).catch(error => {
+            console.error('Error generating sample data:', error);
+            showNotification('Error generating sample data', 'error');
+        });
+    },
+    
+    // Clear all students (for sample data generation)
+    clearAllStudents: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.clear();
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Get error message HTML
+    getErrorMessage: function(message) {
+        return `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--danger);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                <h3>Error</h3>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+};
+// Initialize the special students manager when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    specialStudentsManager.init();
+});
+
+
+  // Teacher Management System with IndexedDB
+const teacherManager = {
+    dbName: 'TeachersDB',
+    dbVersion: 1,
+    storeName: 'teachers',
+    
+    // Initialize the module
+    init: function() {
+        this.setupEventListeners();
+        this.initDB().then(() => {
+            this.renderTeachers();
+            this.updateStats();
+        }).catch(error => {
+            console.error('Failed to initialize database:', error);
+            showNotification('Failed to initialize database', 'error');
+        });
+    },
+    
+    // Initialize IndexedDB
+    initDB: function() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.dbVersion);
+            
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+                this.db = request.result;
+                resolve();
+            };
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(this.storeName)) {
+                    const store = db.createObjectStore(this.storeName, { keyPath: 'id' });
+                    store.createIndex('class', 'class', { unique: false });
+                    store.createIndex('status', 'status', { unique: false });
+                    store.createIndex('email', 'email', { unique: true });
+                }
+            };
+        });
+    },
+    
+    // Setup event listeners
+    setupEventListeners: function() {
+        // Form submission
+        document.getElementById('teacherForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmit();
+        });
+        
+        // Photo preview
+        document.getElementById('teacherPhotoInput').addEventListener('change', (e) => {
+            this.previewImage(e.target, 'teacherPhotoPreview');
+        });
+    },
+    
+    // Handle form submission
+    handleFormSubmit: function() {
+        const formData = this.getFormData();
+        
+        if (!this.validateForm(formData)) {
+            return;
+        }
+        
+        const editingId = document.getElementById('saveTeacherBtn').dataset.editingId;
+        
+        if (editingId) {
+            // Update existing teacher
+            this.updateTeacher(editingId, formData).then(() => {
+                showNotification('Teacher updated successfully!', 'success');
+                this.resetForm();
+                this.renderTeachers();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error updating teacher:', error);
+                showNotification('Error updating teacher', 'error');
+            });
+        } else {
+            // Add new teacher
+            this.addTeacher(formData).then(() => {
+                showNotification('Teacher added successfully!', 'success');
+                this.resetForm();
+                this.renderTeachers();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error adding teacher:', error);
+                showNotification('Error adding teacher', 'error');
+            });
+        }
+    },
+    
+    // Get form data
+    getFormData: function() {
+        return {
+            id: document.getElementById('teacherIDInput').value.trim(),
+            name: document.getElementById('teacherNameInput').value.trim(),
+            class: document.getElementById('teacherClassInput').value.trim(),
+            email: document.getElementById('teacherEmailInput').value.trim(),
+            password: document.getElementById('teacherPasswordInput').value,
+            photo: document.getElementById('teacherPhotoPreview').src,
+            status: 'active',
+            joinDate: new Date().toISOString().split('T')[0],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+    },
+    
+    // Validate form data
+    validateForm: function(data) {
+        if (!data.id || !data.name || !data.class || !data.password) {
+            showNotification('Please fill in all required fields', 'error');
+            return false;
+        }
+        
+        // For new teachers, check if ID already exists
+        const editingId = document.getElementById('saveTeacherBtn').dataset.editingId;
+        if (!editingId) {
+            this.getTeacher(data.id).then(existingTeacher => {
+                if (existingTeacher) {
+                    showNotification('Teacher ID already exists!', 'error');
+                    return false;
+                }
+            }).catch(error => {
+                console.error('Error checking teacher ID:', error);
+            });
+        }
+        
+        return true;
+    },
+    
+    // Add new teacher
+    addTeacher: function(teacherData) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.add(teacherData);
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Update existing teacher
+    updateTeacher: function(teacherId, teacherData) {
+        return new Promise((resolve, reject) => {
+            // First get the existing teacher to preserve createdAt
+            this.getTeacher(teacherId).then(existingTeacher => {
+                const updatedTeacher = {
+                    ...existingTeacher,
+                    ...teacherData,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+                const request = store.put(updatedTeacher);
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            }).catch(error => reject(error));
+        });
+    },
+    
+    // Get single teacher by ID
+    getTeacher: function(teacherId) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.get(teacherId);
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Get all teachers
+    getAllTeachers: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.getAll();
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Delete teacher
+    deleteTeacher: function(teacherId) {
+        if (confirm('Are you sure you want to delete this teacher?')) {
+            this.removeTeacher(teacherId).then(() => {
+                this.renderTeachers();
+                this.updateStats();
+                showNotification('Teacher deleted successfully!', 'success');
+            }).catch(error => {
+                console.error('Error deleting teacher:', error);
+                showNotification('Error deleting teacher', 'error');
+            });
+        }
+    },
+    
+    // Remove teacher from database
+    removeTeacher: function(teacherId) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.delete(teacherId);
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Edit teacher
+    editTeacher: function(teacherId) {
+        this.getTeacher(teacherId).then(teacher => {
+            if (teacher) {
+                // Fill form with teacher data
+                document.getElementById('teacherIDInput').value = teacher.id;
+                document.getElementById('teacherNameInput').value = teacher.name;
+                document.getElementById('teacherClassInput').value = teacher.class;
+                document.getElementById('teacherEmailInput').value = teacher.email || '';
+                document.getElementById('teacherPasswordInput').value = teacher.password || '';
+                document.getElementById('teacherPhotoPreview').src = teacher.photo || 'https://placehold.co/100x100';
+                
+                // Update button to show editing mode
+                const saveBtn = document.getElementById('saveTeacherBtn');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Update Teacher';
+                saveBtn.dataset.editingId = teacherId;
+                
+                // Scroll to form
+                document.getElementById('teacherForm').scrollIntoView({ behavior: 'smooth' });
+            }
+        }).catch(error => {
+            console.error('Error loading teacher for editing:', error);
+            showNotification('Error loading teacher data', 'error');
+        });
+    },
+    
+    // Reset form
+    resetForm: function() {
+        document.getElementById('teacherForm').reset();
+        document.getElementById('teacherPhotoPreview').src = 'https://placehold.co/100x100';
+        
+        const saveBtn = document.getElementById('saveTeacherBtn');
+        saveBtn.innerHTML = '<i class="fas fa-plus"></i> Add Teacher';
+        delete saveBtn.dataset.editingId;
+    },
+    
+    // Render teachers list
+    renderTeachers: function() {
+        const tbody = document.querySelector("#teacherTable tbody");
+        
+        this.getAllTeachers().then(teachers => {
+            this.displayTeachers(tbody, teachers);
+        }).catch(error => {
+            console.error('Error loading teachers:', error);
+            tbody.innerHTML = this.getErrorMessage('Failed to load teachers');
+        });
+    },
+    
+    // Display teachers in the table
+    displayTeachers: function(tbody, teachers) {
+        tbody.innerHTML = '';
+        
+        if (teachers.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: var(--gray);">
+                        <i class="fas fa-chalkboard-teacher" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                        <h4>No teachers found</h4>
+                        <p>Add your first teacher using the form above.</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        teachers.forEach(teacher => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>
+                    <img src="${teacher.photo || 'https://placehold.co/40x40'}" 
+                         width="40" height="40" 
+                         style="border-radius:50%;object-fit:cover;" 
+                         alt="${teacher.name}">
+                </td>
+                <td>
+                    <strong>${teacher.name}</strong>
+                    <br>
+                    <small style="color: var(--gray);">
+                        <span class="status-indicator status-${teacher.status}"></span>${teacher.status}
+                    </small>
+                </td>
+                <td>${teacher.id}</td>
+                <td>${teacher.class}</td>
+                <td>${teacher.email || 'N/A'}</td>
+                <td>
+                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                        <button class="btn btn-warning" 
+                                onclick="teacherManager.editTeacher('${teacher.id}')"
+                                style="padding: 5px 10px; font-size: 14px;">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger" 
+                                onclick="teacherManager.deleteTeacher('${teacher.id}')"
+                                style="padding: 5px 10px; font-size: 14px;">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    },
+    
+    // Update statistics
+    updateStats: function() {
+        this.getAllTeachers().then(teachers => {
+            const totalTeachers = teachers.length;
+            document.getElementById('teacherCount').textContent = totalTeachers;
+            document.getElementById('totalTeacherCount').textContent = totalTeachers;
+        }).catch(error => {
+            console.error('Error updating stats:', error);
+        });
+    },
+    
+    // Export teachers data
+    exportTeachers: function() {
+        this.getAllTeachers().then(teachers => {
+            const dataStr = JSON.stringify(teachers, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `teachers-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showNotification('Teacher data exported successfully!', 'success');
+        }).catch(error => {
+            console.error('Error exporting teachers:', error);
+            showNotification('Error exporting teacher data', 'error');
+        });
+    },
+    
+    // Import teachers data
+    importTeachers: function(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                
+                if (Array.isArray(importedData)) {
+                    this.getAllTeachers().then(existingTeachers => {
+                        const importPromises = importedData.map(newTeacher => {
+                            // Check if teacher already exists
+                            const exists = existingTeachers.some(teacher => teacher.id === newTeacher.id);
+                            if (!exists) {
+                                // Add createdAt and updatedAt if missing
+                                const teacherToAdd = {
+                                    ...newTeacher,
+                                    createdAt: newTeacher.createdAt || new Date().toISOString(),
+                                    updatedAt: new Date().toISOString()
+                                };
+                                return this.addTeacher(teacherToAdd);
+                            }
+                            return Promise.resolve();
+                        });
+                        
+                        Promise.all(importPromises).then(() => {
+                            this.renderTeachers();
+                            this.updateStats();
+                            showNotification('Teachers imported successfully!', 'success');
+                        }).catch(error => {
+                            console.error('Error during import:', error);
+                            showNotification('Error importing some teachers', 'error');
+                        });
+                    }).catch(error => {
+                        console.error('Error checking existing teachers:', error);
+                        showNotification('Error importing file', 'error');
+                    });
+                } else {
+                    showNotification('Invalid file format', 'error');
+                }
+            } catch (error) {
+                showNotification('Error importing file', 'error');
+            }
+        };
+        reader.readAsText(file);
+    },
+    
+    // Preview image
+    previewImage: function(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = input.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function() {
+                preview.src = reader.result;
+            });
+            reader.readAsDataURL(file);
+        }
+    },
+    
+    // Generate sample data (for testing)
+    generateSampleData: function() {
+        const sampleTeachers = [
+            {
+                id: 'T2024001',
+                name: 'Ms. Sarah Johnson',
+                class: 'Grade 5 - Blue',
+                email: 'sarah.johnson@superowly.edu',
+                password: 'teacher123',
+                photo: 'https://placehold.co/100x100',
+                status: 'active',
+                joinDate: '2020-08-15',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            {
+                id: 'T2024002',
+                name: 'Mr. James Wilson',
+                class: 'Grade 4 - Green',
+                email: 'james.wilson@superowly.edu',
+                password: 'teacher123',
+                photo: 'https://placehold.co/100x100',
+                status: 'active',
+                joinDate: '2021-01-10',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+        ];
+        
+        // Clear existing data first
+        this.clearAllTeachers().then(() => {
+            const addPromises = sampleTeachers.map(teacher => this.addTeacher(teacher));
+            return Promise.all(addPromises);
+        }).then(() => {
+            this.renderTeachers();
+            this.updateStats();
+            showNotification('Sample teacher data generated!', 'success');
+        }).catch(error => {
+            console.error('Error generating sample data:', error);
+            showNotification('Error generating sample data', 'error');
+        });
+    },
+    
+    // Clear all teachers (for sample data generation)
+    clearAllTeachers: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.clear();
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Get error message HTML
+    getErrorMessage: function(message) {
+        return `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px; color: var(--danger);">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                    <h4>Error</h4>
+                    <p>${message}</p>
+                </td>
+            </tr>
+        `;
+    },
+    
+    // Search teachers by name, ID, or class
+    searchTeachers: function(searchTerm) {
+        this.getAllTeachers().then(teachers => {
+            const filtered = teachers.filter(teacher => 
+                teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                teacher.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                teacher.class.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (teacher.email && teacher.email.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+            
+            const tbody = document.querySelector("#teacherTable tbody");
+            this.displayTeachers(tbody, filtered);
+        }).catch(error => {
+            console.error('Error searching teachers:', error);
+        });
+    },
+    
+    // Filter teachers by class
+    filterTeachersByClass: function(className) {
+        if (className === 'all') {
+            this.renderTeachers();
+            return;
+        }
+        
+        this.getAllTeachers().then(teachers => {
+            const filtered = teachers.filter(teacher => teacher.class === className);
+            const tbody = document.querySelector("#teacherTable tbody");
+            this.displayTeachers(tbody, filtered);
+        }).catch(error => {
+            console.error('Error filtering teachers:', error);
+        });
+    }
+};
+
+// Initialize the teacher manager when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    teacherManager.init();
+});
+
+// Helper functions
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.classList.add('show');
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+function showPanel(panelId) {
+    document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.remove('active');
+    });
+    document.getElementById(panelId).classList.add('active');
+    
+    const titles = {
+        dashboard: "Dashboard",
+        "special-students": "Special Students",
+        teacher: "Teacher Management",
+        classes: "Class Management",
+        attendance: "Attendance Tracking",
+        admissions: "Admissions Management",
+        payments: "Payment Management",
+        reports: "Reports & Analytics",
+        messaging: "Messaging System",
+        audit: "Audit Logs",
+        settings: "System Settings"
+    };
+    document.getElementById('panelTitle').textContent = titles[panelId];
+}
+
+// Class Management System with IndexedDB
+const classManager = {
+    dbName: 'ClassesDB',
+    dbVersion: 1,
+    storeName: 'classes',
+    
+    // Initialize the module
+    init: function() {
+        this.setupEventListeners();
+        this.initDB().then(() => {
+            this.renderClasses();
+            this.updateStats();
+            this.loadTeachersForDropdown();
+        }).catch(error => {
+            console.error('Failed to initialize database:', error);
+            showNotification('Failed to initialize database', 'error');
+        });
+    },
+    
+    // Initialize IndexedDB
+    initDB: function() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.dbVersion);
+            
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+                this.db = request.result;
+                resolve();
+            };
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(this.storeName)) {
+                    const store = db.createObjectStore(this.storeName, { keyPath: 'code' });
+                    store.createIndex('grade', 'grade', { unique: false });
+                    store.createIndex('teacher', 'teacher', { unique: false });
+                }
+            };
+        });
+    },
+    
+    // Setup event listeners
+    setupEventListeners: function() {
+        // Form submission
+        document.getElementById('classForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmit();
+        });
+        
+        // Cancel edit button
+        document.getElementById('cancelClassEditBtn').addEventListener('click', () => {
+            this.cancelEdit();
+        });
+        
+        // Search functionality
+        document.getElementById('classSearch').addEventListener('input', (e) => {
+            this.searchClasses(e.target.value);
+        });
+        
+        // Filter functionality
+        document.getElementById('classGradeFilter').addEventListener('change', (e) => {
+            this.filterClassesByGrade(e.target.value);
+        });
+    },
+    
+    // Load teachers for dropdown
+    loadTeachersForDropdown: function() {
+        // This would normally fetch from your teachers database
+        const teacherSelect = document.getElementById('classTeacher');
+        
+        // Sample teachers - in a real app, this would come from your teachers DB
+        const sampleTeachers = [
+            { id: 'T2024001', name: 'Ms. Sarah Johnson' },
+            { id: 'T2024002', name: 'Mr. James Wilson' },
+            { id: 'T2024003', name: 'Mrs. Emily Brown' },
+            { id: 'T2024004', name: 'Mr. David Lee' }
+        ];
+        
+        sampleTeachers.forEach(teacher => {
+            const option = document.createElement('option');
+            option.value = teacher.id;
+            option.textContent = teacher.name;
+            teacherSelect.appendChild(option);
+        });
+    },
+    
+    // Handle form submission
+    handleFormSubmit: function() {
+        const formData = this.getFormData();
+        
+        if (!this.validateForm(formData)) {
+            return;
+        }
+        
+        const editingCode = document.getElementById('saveClassBtn').dataset.editingCode;
+        
+        if (editingCode) {
+            // Update existing class
+            this.updateClass(editingCode, formData).then(() => {
+                showNotification('Class updated successfully!', 'success');
+                this.resetForm();
+                this.renderClasses();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error updating class:', error);
+                showNotification('Error updating class', 'error');
+            });
+        } else {
+            // Add new class
+            this.addClass(formData).then(() => {
+                showNotification('Class added successfully!', 'success');
+                this.resetForm();
+                this.renderClasses();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error adding class:', error);
+                showNotification('Error adding class', 'error');
+            });
+        }
+    },
+    
+    // Get form data
+    getFormData: function() {
+        const teacherSelect = document.getElementById('classTeacher');
+        const selectedTeacher = teacherSelect.options[teacherSelect.selectedIndex];
+        
+        return {
+            code: document.getElementById('classCode').value.trim(),
+            name: document.getElementById('className').value.trim(),
+            grade: document.getElementById('classGrade').value,
+            teacher: selectedTeacher.value,
+            teacherName: selectedTeacher.textContent,
+            capacity: parseInt(document.getElementById('classCapacity').value) || 30,
+            room: document.getElementById('classRoom').value.trim(),
+            schedule: document.getElementById('classSchedule').value.trim(),
+            description: document.getElementById('classDescription').value.trim(),
+            currentStudents: 0,
+            status: 'active',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+    },
+    
+    // Validate form data
+    validateForm: function(data) {
+        if (!data.code || !data.name || !data.grade) {
+            showNotification('Please fill in all required fields', 'error');
+            return false;
+        }
+        
+        // For new classes, check if code already exists
+        const editingCode = document.getElementById('saveClassBtn').dataset.editingCode;
+        if (!editingCode) {
+            this.getClass(data.code).then(existingClass => {
+                if (existingClass) {
+                    showNotification('Class code already exists!', 'error');
+                    return false;
+                }
+            }).catch(error => {
+                console.error('Error checking class code:', error);
+            });
+        }
+        
+        return true;
+    },
+    
+    // Add new class
+    addClass: function(classData) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.add(classData);
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Update existing class
+    updateClass: function(classCode, classData) {
+        return new Promise((resolve, reject) => {
+            // First get the existing class to preserve createdAt
+            this.getClass(classCode).then(existingClass => {
+                const updatedClass = {
+                    ...existingClass,
+                    ...classData,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+                const request = store.put(updatedClass);
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            }).catch(error => reject(error));
+        });
+    },
+    
+    // Get single class by code
+    getClass: function(classCode) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.get(classCode);
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Get all classes
+    getAllClasses: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.getAll();
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Delete class
+    deleteClass: function(classCode) {
+        if (confirm('Are you sure you want to delete this class?')) {
+            this.removeClass(classCode).then(() => {
+                this.renderClasses();
+                this.updateStats();
+                showNotification('Class deleted successfully!', 'success');
+            }).catch(error => {
+                console.error('Error deleting class:', error);
+                showNotification('Error deleting class', 'error');
+            });
+        }
+    },
+    
+    // Remove class from database
+    removeClass: function(classCode) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.delete(classCode);
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Edit class
+    editClass: function(classCode) {
+        this.getClass(classCode).then(classData => {
+            if (classData) {
+                // Fill form with class data
+                document.getElementById('classCode').value = classData.code;
+                document.getElementById('className').value = classData.name;
+                document.getElementById('classGrade').value = classData.grade;
+                document.getElementById('classTeacher').value = classData.teacher;
+                document.getElementById('classCapacity').value = classData.capacity;
+                document.getElementById('classRoom').value = classData.room || '';
+                document.getElementById('classSchedule').value = classData.schedule || '';
+                document.getElementById('classDescription').value = classData.description || '';
+                
+                // Update button to show editing mode
+                const saveBtn = document.getElementById('saveClassBtn');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Update Class';
+                saveBtn.dataset.editingCode = classCode;
+                
+                // Show cancel button
+                document.getElementById('cancelClassEditBtn').style.display = 'inline-block';
+                
+                // Scroll to form
+                document.getElementById('classForm').scrollIntoView({ behavior: 'smooth' });
+            }
+        }).catch(error => {
+            console.error('Error loading class for editing:', error);
+            showNotification('Error loading class data', 'error');
+        });
+    },
+    
+    // Cancel editing
+    cancelEdit: function() {
+        this.resetForm();
+    },
+    
+    // Reset form
+    resetForm: function() {
+        document.getElementById('classForm').reset();
+        
+        const saveBtn = document.getElementById('saveClassBtn');
+        saveBtn.innerHTML = '<i class="fas fa-plus"></i> Add Class';
+        delete saveBtn.dataset.editingCode;
+        
+        document.getElementById('cancelClassEditBtn').style.display = 'none';
+    },
+    
+    // Render classes list
+    renderClasses: function(classesToRender = null) {
+        const container = document.getElementById('classesList');
+        
+        if (classesToRender) {
+            this.displayClasses(container, classesToRender);
+        } else {
+            this.getAllClasses().then(classes => {
+                this.displayClasses(container, classes);
+            }).catch(error => {
+                console.error('Error loading classes:', error);
+                container.innerHTML = this.getErrorMessage('Failed to load classes');
+            });
+        }
+    },
+    
+    // Display classes in the container
+    displayClasses: function(container, classes) {
+        container.innerHTML = '';
+        
+        if (classes.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--gray);">
+                    <i class="fas fa-book" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <h3>No classes found</h3>
+                    <p>Add your first class using the form above.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        classes.forEach(classData => {
+            const card = document.createElement('div');
+            card.className = 'student-card';
+            card.innerHTML = this.createClassCardHTML(classData);
+            container.appendChild(card);
+        });
+    },
+    
+    // Create class card HTML
+    createClassCardHTML: function(classData) {
+        const utilization = Math.round((classData.currentStudents / classData.capacity) * 100);
+        const utilizationColor = utilization >= 90 ? 'var(--danger)' : utilization >= 75 ? 'var(--warning)' : 'var(--success)';
+        
+        return `
+            <div class="student-header">
+                <div class="student-info" style="width: 100%;">
+                    <h3>${classData.name}</h3>
+                    <p>Code: ${classData.code} | Grade: ${classData.grade}</p>
+                </div>
+            </div>
+            <div class="student-details">
+                <p><strong>Teacher:</strong> ${classData.teacherName || 'Not assigned'}</p>
+                <p><strong>Room:</strong> ${classData.room || 'Not assigned'}</p>
+                <p><strong>Capacity:</strong> ${classData.currentStudents} / ${classData.capacity} students</p>
+                <p><strong>Utilization:</strong> 
+                    <span style="color: ${utilizationColor}; font-weight: bold;">${utilization}%</span>
+                </p>
+                <p><strong>Status:</strong> <span class="status-indicator status-${classData.status}"></span>${classData.status}</p>
+                ${classData.schedule ? `<p><strong>Schedule:</strong> ${classData.schedule}</p>` : ''}
+                ${classData.description ? `<p><strong>Description:</strong> ${classData.description}</p>` : ''}
+            </div>
+            <div class="student-actions">
+                <button class="btn btn-warning" onclick="classManager.editClass('${classData.code}')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-danger" onclick="classManager.deleteClass('${classData.code}')">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        `;
+    },
+    
+    // Search classes
+    searchClasses: function(searchTerm = null) {
+        const term = searchTerm || document.getElementById('classSearch').value;
+        
+        if (!term) {
+            this.renderClasses();
+            return;
+        }
+        
+        this.getAllClasses().then(allClasses => {
+            const filtered = allClasses.filter(classData => 
+                classData.name.toLowerCase().includes(term.toLowerCase()) ||
+                classData.code.toLowerCase().includes(term.toLowerCase()) ||
+                classData.grade.toLowerCase().includes(term.toLowerCase()) ||
+                (classData.teacherName && classData.teacherName.toLowerCase().includes(term.toLowerCase())) ||
+                (classData.room && classData.room.toLowerCase().includes(term.toLowerCase()))
+            );
+            this.renderClasses(filtered);
+        }).catch(error => {
+            console.error('Error searching classes:', error);
+        });
+    },
+    
+    // Filter classes by grade
+    filterClassesByGrade: function(grade) {
+        if (grade === 'all') {
+            this.renderClasses();
+            return;
+        }
+        
+        this.getAllClasses().then(allClasses => {
+            const filtered = allClasses.filter(classData => classData.grade === grade);
+            this.renderClasses(filtered);
+        }).catch(error => {
+            console.error('Error filtering classes:', error);
+        });
+    },
+    
+    // Update statistics
+    updateStats: function() {
+        this.getAllClasses().then(classes => {
+            const totalClasses = classes.length;
+            const totalStudents = classes.reduce((sum, classData) => sum + classData.currentStudents, 0);
+            const totalTeachers = new Set(classes.map(classData => classData.teacher)).size;
+            
+            document.getElementById('totalClassCount').textContent = totalClasses;
+            document.getElementById('totalStudentsInClasses').textContent = totalStudents;
+            document.getElementById('totalTeachersInClasses').textContent = totalTeachers;
+        }).catch(error => {
+            console.error('Error updating stats:', error);
+        });
+    },
+    
+    // Export classes data
+    exportClasses: function() {
+        this.getAllClasses().then(classes => {
+            const dataStr = JSON.stringify(classes, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `classes-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showNotification('Class data exported successfully!', 'success');
+        }).catch(error => {
+            console.error('Error exporting classes:', error);
+            showNotification('Error exporting class data', 'error');
+        });
+    },
+    
+    // Import classes data
+    importClasses: function(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                
+                if (Array.isArray(importedData)) {
+                    this.getAllClasses().then(existingClasses => {
+                        const importPromises = importedData.map(newClass => {
+                            // Check if class already exists
+                            const exists = existingClasses.some(classData => classData.code === newClass.code);
+                            if (!exists) {
+                                // Add createdAt and updatedAt if missing
+                                const classToAdd = {
+                                    ...newClass,
+                                    createdAt: newClass.createdAt || new Date().toISOString(),
+                                    updatedAt: new Date().toISOString()
+                                };
+                                return this.addClass(classToAdd);
+                            }
+                            return Promise.resolve();
+                        });
+                        
+                        Promise.all(importPromises).then(() => {
+                            this.renderClasses();
+                            this.updateStats();
+                            showNotification('Classes imported successfully!', 'success');
+                        }).catch(error => {
+                            console.error('Error during import:', error);
+                            showNotification('Error importing some classes', 'error');
+                        });
+                    }).catch(error => {
+                        console.error('Error checking existing classes:', error);
+                        showNotification('Error importing file', 'error');
+                    });
+                } else {
+                    showNotification('Invalid file format', 'error');
+                }
+            } catch (error) {
+                showNotification('Error importing file', 'error');
+            }
+        };
+        reader.readAsText(file);
+    },
+    
+    // Generate sample data (for testing)
+    generateSampleData: function() {
+        const sampleClasses = [
+            {
+                code: 'G5-BLUE',
+                name: 'Grade 5 - Blue',
+                grade: 'Grade 5',
+                teacher: 'T2024001',
+                teacherName: 'Ms. Sarah Johnson',
+                capacity: 30,
+                currentStudents: 25,
+                room: 'Room 101',
+                schedule: 'Mon-Fri 8:00 AM - 3:00 PM',
+                description: 'Main Grade 5 class with focus on core subjects',
+                status: 'active',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            {
+                code: 'G4-GREEN',
+                name: 'Grade 4 - Green',
+                grade: 'Grade 4',
+                teacher: 'T2024002',
+                teacherName: 'Mr. James Wilson',
+                capacity: 28,
+                currentStudents: 22,
+                room: 'Room 102',
+                schedule: 'Mon-Fri 8:30 AM - 3:30 PM',
+                description: 'Grade 4 class with science and math focus',
+                status: 'active',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            {
+                code: 'K-A',
+                name: 'Kindergarten - A',
+                grade: 'Kindergarten',
+                teacher: 'T2024003',
+                teacherName: 'Mrs. Emily Brown',
+                capacity: 20,
+                currentStudents: 18,
+                room: 'Room 201',
+                schedule: 'Mon-Fri 9:00 AM - 2:00 PM',
+                description: 'Morning kindergarten session',
+                status: 'active',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+        ];
+        
+        // Clear existing data first
+        this.clearAllClasses().then(() => {
+            const addPromises = sampleClasses.map(classData => this.addClass(classData));
+            return Promise.all(addPromises);
+        }).then(() => {
+            this.renderClasses();
+            this.updateStats();
+            showNotification('Sample class data generated!', 'success');
+        }).catch(error => {
+            console.error('Error generating sample data:', error);
+            showNotification('Error generating sample data', 'error');
+        });
+    },
+    
+    // Clear all classes (for sample data generation)
+    clearAllClasses: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.clear();
+            
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    // Get error message HTML
+    getErrorMessage: function(message) {
+        return `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--danger);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                <h3>Error</h3>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+};
+
+// Initialize the class manager when the classes panel is shown
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize class manager when classes panel is first accessed
+    document.querySelector('[data-panel="classes"]').addEventListener('click', function() {
+        if (!classManager.initialized) {
+            classManager.init();
+            classManager.initialized = true;
+        }
+    });
+});
+
+// Admission Management System with IndexedDB
+const admissionManager = {
+    dbName: 'SchoolSyncDB',
+    dbVersion: 2,
+    storeName: 'enrollments',
+    initialized: false,
+    db: null,
+
+    // ---------- Initialization ----------
+    init: function() {
+        this.setupEventListeners();
+        this.initDB().then(() => {
+            this.renderApplications();
+            this.updateStats();
+            this.checkForNewEnrollments();
+        }).catch(error => {
+            console.error('Failed to initialize database:', error);
+            this.showNotification('Failed to initialize database', 'error');
+        });
+    },
+
+    // ---------- Database ----------
+    initDB: function() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.dbVersion);
+
+            request.onerror = () => reject(request.error);
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(this.storeName)) {
+                    const store = db.createObjectStore(this.storeName, { keyPath: 'id' });
+                    store.createIndex('status', 'status', { unique: false });
+                    store.createIndex('grade', 'grade', { unique: false });
+                    store.createIndex('email', 'email', { unique: false });
+                    store.createIndex('applicationDate', 'applicationDate', { unique: false });
+                    store.createIndex('source', 'source', { unique: false });
+                }
+            };
+
+            request.onsuccess = () => {
+                this.db = request.result;
+                resolve();
+            };
+        });
+    },
+
+    // ---------- Event Listeners ----------
+    setupEventListeners: function() {
+        // Form submission
+        const form = document.getElementById('admissionForm');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleFormSubmit();
+            });
+        }
+
+        // Search
+        const searchInput = document.getElementById('admissionSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.searchApplications(e.target.value);
+            });
+        }
+
+        // Filters
+        const statusFilter = document.getElementById('admissionStatusFilter');
+        if (statusFilter) {
+            statusFilter.addEventListener('change', (e) => {
+                this.filterApplicationsByStatus(e.target.value);
+            });
+        }
+
+        const gradeFilter = document.getElementById('admissionGradeFilter');
+        if (gradeFilter) {
+            gradeFilter.addEventListener('change', (e) => {
+                this.filterApplicationsByGrade(e.target.value);
+            });
+        }
+
+        // Set default date
+        const applicationDateEl = document.getElementById('applicationDate');
+        if (applicationDateEl) applicationDateEl.valueAsDate = new Date();
+    },
+
+    // ---------- Enrollment Processing ----------
+    checkForNewEnrollments: function() {
+        const recentEnrollment = localStorage.getItem('recentEnrollment');
+        if (recentEnrollment) {
+            try {
+                const enrollmentData = JSON.parse(recentEnrollment);
+                this.processNewEnrollment(enrollmentData);
+                localStorage.removeItem('recentEnrollment');
+            } catch (error) {
+                console.error('Error processing recent enrollment:', error);
+            }
+        }
+    },
+
+    processNewEnrollment: function(enrollmentData) {
+        const applicationData = this.convertEnrollmentToApplication(enrollmentData);
+        
+        this.addApplication(applicationData).then(() => {
+            this.showNotification('New enrollment application added successfully!', 'success');
+            this.renderApplications();
+            this.updateStats();
+        }).catch(error => {
+            console.error('Error adding enrollment application:', error);
+            this.showNotification('Error processing enrollment application', 'error');
+        });
+    },
+
+    convertEnrollmentToApplication: function(enrollmentData) {
+        // Safe data extraction
+        const child = enrollmentData.child || {};
+        const parent = enrollmentData.parent || {};
+        const program = enrollmentData.program || {};
+        
+        const firstName = child.firstName || 'Unknown';
+        const lastName = child.lastName || 'Student';
+        const fullName = `${firstName} ${lastName}`.trim();
+        
+        // Calculate age
+        let age = 'N/A';
+        if (child.dob) {
+            try {
+                const dob = new Date(child.dob);
+                age = Math.floor((new Date() - dob) / (365.25 * 24 * 60 * 60 * 1000));
+            } catch (e) {
+                console.error('Error calculating age:', e);
+            }
+        }
+        
+        const grade = this.calculateGradeFromAge(age);
+        
+        return {
+            id: this.generateApplicationId(),
+            name: fullName,
+            email: parent.email || 'No email provided',
+            phone: parent.phone || 'No phone provided',
+            dob: child.dob || new Date().toISOString().split('T')[0],
+            age: age,
+            gender: child.gender || 'Not specified',
+            grade: grade,
+            applicationDate: new Date().toISOString().split('T')[0],
+            parentName: `${parent.firstName || ''} ${parent.lastName || ''}`.trim() || 'Parent name not provided',
+            parentEmail: parent.email || 'No email provided',
+            parentPhone: parent.phone || 'No phone provided',
+            emergencyContact: parent.phone || 'No emergency contact',
+            address: parent.address || 'Address not provided',
+            city: parent.city || 'City not provided',
+            zip: parent.zip || 'ZIP not provided',
+            previousSchool: 'Not specified',
+            academicLevel: grade,
+            specialNeeds: child.allergies || 'None reported',
+            status: 'pending',
+            notes: this.generateNotesFromEnrollment(enrollmentData),
+            programType: program.type || 'Not specified',
+            startDate: program.startDate || new Date().toISOString().split('T')[0],
+            additionalClasses: this.getAdditionalClasses(program.additionalClasses || {}),
+            costs: enrollmentData.costs || { total: 0 },
+            source: 'online-enrollment',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+    },
+
+    calculateGradeFromAge: function(age) {
+        if (age === 'N/A') return 'Kindergarten';
+        if (age < 3) return 'Pre-K';
+        if (age < 4) return 'Pre-K 1';
+        if (age < 5) return 'Pre-K 2';
+        if (age < 6) return 'Kindergarten';
+        if (age < 7) return 'Grade 1';
+        if (age < 8) return 'Grade 2';
+        if (age < 9) return 'Grade 3';
+        if (age < 10) return 'Grade 4';
+        if (age < 11) return 'Grade 5';
+        return 'Grade 6+';
+    },
+
+    generateNotesFromEnrollment: function(enrollmentData) {
+        let notes = [];
+        const program = enrollmentData.program || {};
+        const child = enrollmentData.child || {};
+
+        if (program.type) {
+            notes.push(`Program: ${this.getProgramDisplayName(program.type)}`);
+        }
+
+        if (program.startDate) {
+            notes.push(`Preferred Start: ${new Date(program.startDate).toLocaleDateString()}`);
+        }
+
+        if (child.allergies) {
+            notes.push(`Medical Notes: ${child.allergies}`);
+        }
+
+        const additionalClasses = this.getAdditionalClasses(program.additionalClasses || {});
+        if (additionalClasses.length > 0) {
+            notes.push(`Additional Classes: ${additionalClasses.join(', ')}`);
+        }
+
+        if (enrollmentData.costs && enrollmentData.costs.total) {
+            notes.push(`Total Cost: ${this.formatCurrency(enrollmentData.costs.total)}`);
+        }
+
+        if (enrollmentData.comments) {
+            notes.push(`Parent Comments: ${enrollmentData.comments}`);
+        }
+
+        return notes.join('\n') || 'No additional notes';
+    },
+
+    getProgramDisplayName: function(programType) {
+        const programNames = {
+            'full-day': 'Full Day Program',
+            'half-day-am': 'Half Day Morning',
+            'half-day-pm': 'Half Day Afternoon'
+        };
+        return programNames[programType] || programType || 'Not specified';
+    },
+
+    getAdditionalClasses: function(additionalClasses) {
+        const classes = [];
+        if (additionalClasses.art) classes.push('Art');
+        if (additionalClasses.music) classes.push('Music');
+        if (additionalClasses.sports) classes.push('Sports');
+        return classes;
+    },
+
+    formatCurrency: function(amount) {
+        if (typeof amount !== 'number') amount = Number(amount) || 0;
+        return '₦' + amount.toLocaleString('en-NG');
+    },
+
+    // ---------- Form Management ----------
+    showNewApplicationForm: function() {
+        const form = document.getElementById('admissionForm');
+        if (form) {
+            form.style.display = 'block';
+            this.resetForm();
+            form.scrollIntoView({ behavior: 'smooth' });
+        }
+    },
+
+    hideForm: function() {
+        const form = document.getElementById('admissionForm');
+        if (form) form.style.display = 'none';
+    },
+
+    clearForm: function() {
+        this.resetForm();
+    },
+
+    resetForm: function() {
+        const form = document.getElementById('admissionForm');
+        if (form) {
+            form.reset();
+            const applicationDateEl = document.getElementById('applicationDate');
+            if (applicationDateEl) applicationDateEl.valueAsDate = new Date();
+            
+            const saveBtn = document.getElementById('saveAdmissionBtn');
+            if (saveBtn) {
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Application';
+                delete saveBtn.dataset.editingId;
+            }
+        }
+    },
+
+    generateApplicationId: function() {
+        const timestamp = Date.now().toString(36);
+        const random = Math.floor(Math.random() * 0xFFFFFF).toString(36);
+        return `APP-${timestamp}-${random}`.toUpperCase();
+    },
+
+    handleFormSubmit: function() {
+        const formData = this.getFormData();
+
+        if (!this.validateForm(formData)) {
+            return;
+        }
+
+        const editingId = document.getElementById('saveAdmissionBtn')?.dataset.editingId;
+
+        if (editingId) {
+            this.updateApplication(editingId, formData).then(() => {
+                this.showNotification('Application updated successfully!', 'success');
+                this.hideForm();
+                this.renderApplications();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error updating application:', error);
+                this.showNotification('Error updating application', 'error');
+            });
+        } else {
+            this.addApplication(formData).then(() => {
+                this.showNotification('Application submitted successfully!', 'success');
+                this.hideForm();
+                this.renderApplications();
+                this.updateStats();
+            }).catch(error => {
+                console.error('Error adding application:', error);
+                this.showNotification('Error submitting application', 'error');
+            });
+        }
+    },
+
+    getFormData: function() {
+        const getValue = (id) => {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        };
+
+        return {
+            id: this.generateApplicationId(),
+            name: getValue('applicantName'),
+            email: getValue('parentEmail'),
+            phone: getValue('parentPhone'),
+            dob: getValue('applicantDOB'),
+            gender: getValue('applicantGender'),
+            grade: getValue('applicantGrade'),
+            applicationDate: getValue('applicationDate') || new Date().toISOString().split('T')[0],
+            parentName: getValue('parentName'),
+            parentEmail: getValue('parentEmail'),
+            parentPhone: getValue('parentPhone'),
+            emergencyContact: getValue('emergencyContact'),
+            address: getValue('homeAddress'),
+            previousSchool: getValue('previousSchool'),
+            academicLevel: getValue('academicLevel'),
+            specialNeeds: getValue('specialNeeds'),
+            status: getValue('applicationStatus') || 'pending',
+            notes: getValue('applicationNotes'),
+            source: 'manual-entry',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+    },
+
+    validateForm: function(data) {
+        if (!data.name || !data.email || !data.phone || !data.dob || !data.grade || !data.parentName) {
+            this.showNotification('Please fill in all required fields', 'error');
+            return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.email)) {
+            this.showNotification('Please enter a valid email address', 'error');
+            return false;
+        }
+
+        return true;
+    },
+
+    // ---------- Database Operations ----------
+    addApplication: function(applicationData) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.add(applicationData);
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    updateApplication: function(applicationId, applicationData) {
+        return new Promise((resolve, reject) => {
+            this.getApplication(applicationId).then(existingApplication => {
+                if (!existingApplication) {
+                    return reject(new Error('Application not found'));
+                }
+
+                const updatedApplication = {
+                    ...existingApplication,
+                    ...applicationData,
+                    id: existingApplication.id,
+                    updatedAt: new Date().toISOString()
+                };
+
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+                const request = store.put(updatedApplication);
+
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            }).catch(err => reject(err));
+        });
+    },
+
+    getApplication: function(applicationId) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.get(applicationId);
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    getAllApplications: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.getAll();
+
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    removeApplication: function(applicationId) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.delete(applicationId);
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    deleteApplication: function(applicationId) {
+        if (!confirm('Are you sure you want to delete this application?')) return;
+        
+        this.removeApplication(applicationId).then(() => {
+            this.renderApplications();
+            this.updateStats();
+            this.showNotification('Application deleted successfully!', 'success');
+        }).catch(error => {
+            console.error('Error deleting application:', error);
+            this.showNotification('Error deleting application', 'error');
+        });
+    },
+
+    updateApplicationStatus: function(applicationId, newStatus) {
+        this.getApplication(applicationId).then(application => {
+            if (!application) {
+                this.showNotification('Application not found', 'error');
+                return;
+            }
+
+            application.status = newStatus;
+            application.updatedAt = new Date().toISOString();
+
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.put(application);
+
+            request.onsuccess = () => {
+                this.renderApplications();
+                this.updateStats();
+                this.showNotification(`Application status updated to ${newStatus}`, 'success');
+            };
+
+            request.onerror = (e) => {
+                console.error('Error updating status:', e.target.error);
+                this.showNotification('Error updating application status', 'error');
+            };
+        }).catch(error => {
+            console.error('Error loading application:', error);
+            this.showNotification('Error updating application status', 'error');
+        });
+    },
+
+    editApplication: function(applicationId) {
+        this.getApplication(applicationId).then(application => {
+            if (!application) {
+                this.showNotification('Application not found', 'error');
+                return;
+            }
+
+            // Fill form with application data
+            const setValue = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value || '';
+            };
+
+            const setSelectValue = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    for (let i = 0; i < el.options.length; i++) {
+                        if (el.options[i].value === value) {
+                            el.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            };
+
+            setValue('applicantName', application.name);
+            setValue('applicantDOB', application.dob);
+            setSelectValue('applicantGender', application.gender);
+            setSelectValue('applicantGrade', application.grade);
+            setValue('applicationDate', application.applicationDate);
+            setValue('parentName', application.parentName);
+            setValue('parentEmail', application.email);
+            setValue('parentPhone', application.phone);
+            setValue('emergencyContact', application.emergencyContact);
+            setValue('homeAddress', application.address);
+            setValue('previousSchool', application.previousSchool);
+            setValue('academicLevel', application.academicLevel);
+            setValue('specialNeeds', application.specialNeeds);
+            setSelectValue('applicationStatus', application.status);
+            setValue('applicationNotes', application.notes);
+
+            // Update button to show editing mode
+            const saveBtn = document.getElementById('saveAdmissionBtn');
+            if (saveBtn) {
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Update Application';
+                saveBtn.dataset.editingId = applicationId;
+            }
+
+            // Show form
+            this.showNewApplicationForm();
+
+        }).catch(error => {
+            console.error('Error loading application for editing:', error);
+            this.showNotification('Error loading application data', 'error');
+        });
+    },
+
+    // ---------- Rendering ----------
+    renderApplications: function(applicationsToRender = null) {
+        const container = document.getElementById('admissionsList');
+        if (!container) return;
+
+        if (applicationsToRender) {
+            this.displayApplications(container, applicationsToRender);
+        } else {
+            this.getAllApplications().then(applications => {
+                this.displayApplications(container, applications);
+            }).catch(error => {
+                console.error('Error loading applications:', error);
+                container.innerHTML = this.getErrorMessage('Failed to load applications');
+            });
+        }
+    },
+
+    displayApplications: function(container, applications) {
+        container.innerHTML = '';
+
+        if (!applications || applications.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--gray);">
+                    <i class="fas fa-file-alt" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <h3>No applications found</h3>
+                    <p>Add your first admission application using the form above.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Sort by creation date (newest first)
+        applications.sort((a, b) => {
+            const da = new Date(a.createdAt || 0);
+            const db = new Date(b.createdAt || 0);
+            return db - da;
+        });
+
+        applications.forEach(application => {
+            const card = document.createElement('div');
+            card.className = 'student-card';
+            card.innerHTML = this.createApplicationCardHTML(application);
+            container.appendChild(card);
+        });
+    },
+
+    createApplicationCardHTML: function(application) {
+        const statusColors = {
+            'pending': 'var(--warning)',
+            'under-review': 'var(--primary)',
+            'approved': 'var(--success)',
+            'rejected': 'var(--danger)',
+            'waitlisted': 'var(--secondary)'
+        };
+
+        const statusIcons = {
+            'pending': 'clock',
+            'under-review': 'search',
+            'approved': 'check-circle',
+            'rejected': 'times-circle',
+            'waitlisted': 'hourglass-half'
+        };
+
+        const sourceBadge = application.source === 'online-enrollment' ? 
+            '<span style="background: var(--success); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7em; margin-left: 5px;">Online</span>' : 
+            '<span style="background: var(--primary); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7em; margin-left: 5px;">Manual</span>';
+
+        // Safe initials
+        let initials = '??';
+        if (application.name && application.name !== 'Unknown Student') {
+            const nameParts = application.name.split(' ').filter(part => part.length > 0);
+            if (nameParts.length >= 2) {
+                initials = (nameParts[0][0] + nameParts[1][0]).toUpperCase();
+            } else if (nameParts.length === 1) {
+                initials = nameParts[0].substring(0, 2).toUpperCase();
+            }
+        }
+
+        return `
+            <div class="student-header">
+                <div class="student-avatar" style="background: var(--primary); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">
+                    ${initials}
+                </div>
+                <div class="student-info">
+                    <h3>${this.escapeHTML(application.name || 'Unknown')} ${sourceBadge}
+                        <span style="color: ${statusColors[application.status]}; font-size: 0.8em;">
+                            <i class="fas fa-${statusIcons[application.status]}"></i> ${(application.status || 'pending').toUpperCase()}
+                        </span>
+                    </h3>
+                    <p>ID: ${application.id || 'N/A'} | Grade: ${application.grade || 'N/A'}</p>
+                </div>
+            </div>
+            <div class="student-details">
+                <p><strong>Email:</strong> ${this.escapeHTML(application.email || 'N/A')}</p>
+                <p><strong>Phone:</strong> ${this.escapeHTML(application.phone || 'N/A')}</p>
+                <p><strong>Age:</strong> ${this.escapeHTML(String(application.age || 'N/A'))} years</p>
+                <p><strong>Parent:</strong> ${this.escapeHTML(application.parentName || 'N/A')}</p>
+                <p><strong>Applied:</strong> ${new Date(application.applicationDate || application.createdAt || '').toLocaleDateString() || 'N/A'}</p>
+                ${application.programType ? `<p><strong>Program:</strong> ${this.escapeHTML(this.getProgramDisplayName(application.programType))}</p>` : ''}
+                ${application.costs ? `<p><strong>Total Cost:</strong> ${this.escapeHTML(this.formatCurrency(application.costs.total || 0))}</p>` : ''}
+                ${application.specialNeeds && application.specialNeeds !== 'None reported' ? `<p><strong>Special Needs:</strong> ${this.escapeHTML(application.specialNeeds)}</p>` : ''}
+            </div>
+            <div class="student-actions">
+                <button class="btn btn-warning" onclick="admissionManager.editApplication('${application.id}')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-danger" onclick="admissionManager.deleteApplication('${application.id}')">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+                <select class="form-control" style="margin-top: 5px; font-size: 14px;" 
+                        onchange="admissionManager.updateApplicationStatus('${application.id}', this.value)">
+                    <option value="pending" ${application.status === 'pending' ? 'selected' : ''}>Pending</option>
+                    <option value="under-review" ${application.status === 'under-review' ? 'selected' : ''}>Under Review</option>
+                    <option value="approved" ${application.status === 'approved' ? 'selected' : ''}>Approve</option>
+                    <option value="rejected" ${application.status === 'rejected' ? 'selected' : ''}>Reject</option>
+                    <option value="waitlisted" ${application.status === 'waitlisted' ? 'selected' : ''}>Waitlist</option>
+                </select>
+            </div>
+        `;
+    },
+
+    escapeHTML: function(str) {
+        if (str === undefined || str === null) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    },
+
+    // ---------- Search & Filters ----------
+    searchApplications: function(searchTerm = '') {
+        const term = searchTerm.trim().toLowerCase();
+        if (!term) {
+            this.renderApplications();
+            return;
+        }
+
+        this.getAllApplications().then(allApplications => {
+            const filtered = allApplications.filter(application =>
+                (application.name || '').toLowerCase().includes(term) ||
+                (application.email || '').toLowerCase().includes(term) ||
+                (application.id || '').toLowerCase().includes(term) ||
+                (application.grade || '').toLowerCase().includes(term) ||
+                (application.parentName || '').toLowerCase().includes(term)
+            );
+            this.renderApplications(filtered);
+        }).catch(error => {
+            console.error('Error searching applications:', error);
+        });
+    },
+
+    filterApplicationsByStatus: function(status) {
+        if (status === 'all') {
+            this.renderApplications();
+            return;
+        }
+
+        this.getAllApplications().then(allApplications => {
+            const filtered = allApplications.filter(application => application.status === status);
+            this.renderApplications(filtered);
+        }).catch(error => {
+            console.error('Error filtering applications:', error);
+        });
+    },
+
+    filterApplicationsByGrade: function(grade) {
+        if (grade === 'all') {
+            this.renderApplications();
+            return;
+        }
+
+        this.getAllApplications().then(allApplications => {
+            const filtered = allApplications.filter(application => application.grade === grade);
+            this.renderApplications(filtered);
+        }).catch(error => {
+            console.error('Error filtering applications:', error);
+        });
+    },
+
+    // ---------- Statistics ----------
+    updateStats: function() {
+        this.getAllApplications().then(applications => {
+            const totalApplications = applications.length;
+            const approvedApplications = applications.filter(app => app.status === 'approved').length;
+            const pendingApplications = applications.filter(app => app.status === 'pending' || app.status === 'under-review').length;
+            const rejectedApplications = applications.filter(app => app.status === 'rejected').length;
+
+            document.getElementById('totalApplications').textContent = totalApplications;
+            document.getElementById('pendingApplications').textContent = pendingApplications;
+            document.getElementById('approvedApplications').textContent = approvedApplications;
+            document.getElementById('rejectedApplications').textContent = rejectedApplications;
+        }).catch(error => {
+            console.error('Error updating stats:', error);
+        });
+    },
+
+    // ---------- Actions ----------
+    processBatchApplications: function() {
+        this.showNotification('Batch processing feature coming soon!', 'info');
+    },
+
+    exportAdmissions: function() {
+        this.getAllApplications().then(applications => {
+            const dataStr = JSON.stringify(applications, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `admission-applications-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            this.showNotification('Applications data exported successfully!', 'success');
+        }).catch(error => {
+            console.error('Error exporting applications:', error);
+            this.showNotification('Error exporting applications data', 'error');
+        });
+    },
+
+    generateAdmissionReport: function() {
+        this.showNotification('Report generation feature coming soon!', 'info');
+    },
+
+    importApplications: function(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result);
+
+                if (Array.isArray(importedData)) {
+                    this.getAllApplications().then(existingApplications => {
+                        const importPromises = importedData.map(newApplication => {
+                            const exists = existingApplications.some(app => app.id === newApplication.id);
+                            if (!exists) {
+                                const applicationToAdd = {
+                                    ...newApplication,
+                                    createdAt: newApplication.createdAt || new Date().toISOString(),
+                                    updatedAt: new Date().toISOString()
+                                };
+                                return this.addApplication(applicationToAdd);
+                            }
+                            return Promise.resolve();
+                        });
+
+                        Promise.all(importPromises).then(() => {
+                            this.renderApplications();
+                            this.updateStats();
+                            this.showNotification('Applications imported successfully!', 'success');
+                        });
+                    });
+                } else {
+                    this.showNotification('Invalid file format', 'error');
+                }
+            } catch (error) {
+                this.showNotification('Error importing file', 'error');
+            }
+        };
+        reader.readAsText(file);
+    },
+
+    bulkDelete: function() {
+        if (!confirm('Are you sure you want to delete ALL applications? This action cannot be undone.')) return;
+        
+        this.clearAllApplications().then(() => {
+            this.renderApplications();
+            this.updateStats();
+            this.showNotification('All applications deleted successfully!', 'success');
+        }).catch(error => {
+            console.error('Error deleting applications:', error);
+            this.showNotification('Error deleting applications', 'error');
+        });
+    },
+
+    clearAllApplications: function() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.clear();
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    generateSampleData: function() {
+        const sampleApplications = [
+            {
+                id: this.generateApplicationId(),
+                name: 'Emma Johnson',
+                email: 'emma.johnson@example.com',
+                phone: '+1-555-0101',
+                dob: '2016-03-15',
+                age: 8,
+                gender: 'Female',
+                grade: 'Grade 2',
+                applicationDate: '2024-05-01',
+                parentName: 'Sarah Johnson',
+                parentEmail: 'sarah.johnson@example.com',
+                parentPhone: '+1-555-0102',
+                emergencyContact: '+1-555-0102',
+                address: '123 Main St, Anytown, USA',
+                previousSchool: 'Little Learners Academy',
+                academicLevel: 'Grade 2',
+                specialNeeds: 'None',
+                status: 'under-review',
+                notes: 'Excellent academic record, interested in arts program',
+                source: 'online-enrollment',
+                programType: 'full-day',
+                startDate: '2024-09-01',
+                additionalClasses: ['Art', 'Music'],
+                costs: { total: 95000 },
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+        ];
+
+        this.clearAllApplications().then(() => {
+            const addPromises = sampleApplications.map(application => this.addApplication(application));
+            return Promise.all(addPromises);
+        }).then(() => {
+            this.renderApplications();
+            this.updateStats();
+            this.showNotification('Sample admission data generated!', 'success');
+        }).catch(error => {
+            console.error('Error generating sample data:', error);
+            this.showNotification('Error generating sample data', 'error');
+        });
+    },
+
+    // ---------- UI ----------
+    showNotification: function(message, type = 'info') {
+        const notification = document.getElementById('notification');
+        if (!notification) {
+            console.log(`${type.toUpperCase()}: ${message}`);
+            return;
+        }
+
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.style.display = 'block';
+
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    },
+
+    getErrorMessage: function(message) {
+        return `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--danger);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                <h3>Error</h3>
+                <p>${this.escapeHTML(message)}</p>
+            </div>
+        `;
+    }
+};
+
+// Initialize when admissions panel is shown
+document.addEventListener('DOMContentLoaded', function() {
+    const admissionsPanel = document.querySelector('[data-panel="admissions"]');
+    if (admissionsPanel) {
+        admissionsPanel.addEventListener('click', function() {
+            if (!admissionManager.initialized) {
+                admissionManager.init();
+                admissionManager.initialized = true;
+            }
+        });
+    }
+});
+
+// Fix for missing renderSpecialStudents function
+function renderSpecialStudents() {
+    console.log('Special students rendering placeholder');
+}
+
+
+  </script>
+</body>
+</html>
